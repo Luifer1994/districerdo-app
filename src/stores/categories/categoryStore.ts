@@ -37,5 +37,15 @@ export const useCategoryStore = defineStore("categoryStore", {
         });
       }
     },
+
+    async createCategory(category: Category) {
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        body: JSON.stringify(category),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
   },
 });

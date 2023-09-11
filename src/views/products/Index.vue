@@ -8,7 +8,7 @@
             <v-col cols="12" lg="4" md="6">
               <v-text-field
                 density="compact"
-                label="Buscar clientes"
+                label="Buscar productos"
                 hide-details
                 variant="outlined"
                 v-model="ProductStore.search"
@@ -26,20 +26,42 @@
                   <th>SKU</th>
                   <th>NOMBRE</th>
                   <th>CATEGORÍA</th>
+                  <th>STOCK MÍNIMO</th>
+                  <th>EN STOCK</th>
                   <th class="text-end">ACCIONES</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="Product in ProductStore.Products" :key="Product.id">
-                  <td class="font-weight-medium"
-                  >{{ Product.sku }}</td>
+                  <td class="font-weight-medium">{{ Product.sku }}</td>
                   <td>{{ Product.name }}</td>
-                  
+
                   <td>{{ Product.category.name }}</td>
+                  <td>
+                    {{ Product.minimum_stock }} Kg
+                  </td>
+                  <td>
+                    <v-badge
+                      :content="Product.stock + ' Kg'"
+                      :color="
+                        Product.stock <= Product.minimum_stock
+                          ? 'error'
+                          : Product.stock > Product.minimum_stock &&
+                            Product.stock <= Product.minimum_stock + 50
+                          ? 'warning'
+                          : Product.stock > Product.minimum_stock + 50
+                          ? 'success'
+                          : 'primary'
+                      "
+                      overlap
+                    >
+                    </v-badge>
+                  </td>
                   <td class="text-end">
                     <v-btn
-                      color="secondary"
-                      size="x-small"
+                      color="primary"
+                      density="compact"
+                      icon="mdi-pencil"
                       v-if="this.validatePermission(['products-update'])"
                       @click="editProduct(Product.id)"
                     >
@@ -100,3 +122,8 @@ onMounted(() => {
   CategoryStore.getCategories();
 });
 </script>
+<!-- <style>
+.v-badge__badge {
+  padding: 4px 8px;
+}
+</style> -->

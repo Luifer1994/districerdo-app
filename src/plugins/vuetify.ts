@@ -1,5 +1,6 @@
 import { createVuetify } from "vuetify";
 import type { ThemeDefinition } from "vuetify";
+import { es } from 'vuetify/locale'
 
 import "@mdi/font/css/materialdesignicons.css";
 import * as components from "vuetify/components";
@@ -33,6 +34,11 @@ const Darktheme: ThemeDefinition = {
 };
 
 export default createVuetify({
+  /* locale: {
+    locale: 'es',
+    fallback: 'es',
+    messages: { es },
+  }, */
   components,
   directives,
   theme: {
@@ -53,5 +59,5 @@ export default createVuetify({
       flat: true,
       elevation: 10,
     },
-  },
+  }
 });

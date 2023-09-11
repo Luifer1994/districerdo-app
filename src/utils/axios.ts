@@ -42,16 +42,21 @@ axiosHttp.interceptors.response.use(
   },
   error => {
 
-    if (error.response.data && (error.response.status !== 403 || error.response.status !== 401)) {
-      Object.keys(error.response.data).forEach((key) => {
-        if (error.response.data[key] && key !== 'status') {
-          useNotification().notify({
-            title: error.response.data[key],
-            type: "error",
-          });
+    if (error.response.status !== 403 && error.response.status !== 401 && error.response.status !== 500) {
+      const responseData = error.response.data;
+      Object.keys(responseData).forEach((key) => {
+        if (key !== 'status' && key !== 'tokenRefresh') {
+          const errorMessage = responseData[key];
+          if (errorMessage) {
+            useNotification().notify({
+              title: errorMessage,
+              type: "error",
+            });
+          }
         }
       });
     }
+    
 
     if (error.response.status === 403) {
       localStorage.removeItem("token");

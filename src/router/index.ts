@@ -60,6 +60,39 @@ const router = createRouter({
           component: () => import('@/views/invoices/Index.vue'),
          /*  meta: { permission: 'invoices-list' }, */
         },
+        {
+          name: 'Providers',
+          path: '/providers',
+          component: () => import('@/views/providers/Index.vue'),
+          meta: { permission: 'providers-list' },
+        },
+        {
+          name: 'Purchases',
+          path: '/purchases',
+          redirect: '/purchases/list',
+          component: () => import('@/views/purchases/Index.vue'),
+          meta: { permission: 'purchases-list' },
+         children: [
+          {
+            name: 'purchase-list',
+            path: '/purchases/list',
+            component: () => import('@/views/purchases/List.vue'),
+            meta: { permission: 'purchases-list' },
+          },
+          {
+            name: 'purchase-create',
+            path: '/purchases/create',
+            component: () => import('@/views/purchases/CreatePurchase.vue'),
+            meta: { permission: 'purchases-create' },
+          },
+          {
+            name: 'purchase-detail',
+            path: '/purchases/detail/:id',
+            component: () => import('@/views/purchases/Detail.vue'),
+            meta: { permission: 'purchases-show' },
+          }
+          ],
+        }
       ],
     },
     {

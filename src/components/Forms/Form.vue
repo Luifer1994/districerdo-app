@@ -17,6 +17,20 @@
             density="compact"
           ></v-text-field>
         </template>
+
+        <template v-if="field.type === 'number'">
+          <v-text-field
+            v-model="field.value"
+            :label="field.label"
+            :rules="field.rules"
+            :error-messages="field.messaggeError"
+            variant="outlined"
+            density="compact"
+            type="number"
+            :min="0"
+          ></v-text-field>
+        </template>
+
         <template v-if="field.type === 'email'">
           <v-text-field
             v-model="field.value"

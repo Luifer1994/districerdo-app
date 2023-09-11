@@ -5,6 +5,8 @@ export interface Product {
   sku: string;
   category_id: number;
   category: Category;
+  stock?: number;
+  minimum_stock?: number;
 }
 
 export interface Category {
@@ -33,12 +35,5 @@ export interface Item {
   name: string | null;
   description: string | null;
   price: number | null;
-  supplies: Array<Supplie>;
-}
-
-export interface Supplie {
-  id: number | null;
-  name: string | null;
-  price: number;
-  quantity: number;
+  quantity:number | null
 }

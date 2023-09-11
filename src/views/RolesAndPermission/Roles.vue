@@ -42,10 +42,11 @@
 
                 <td>
                   <v-btn
-                    color="secondary"
+                  color="primary"
+                  density="compact"
+                  icon="mdi-pencil"
                     @click="getRoleById(item.id)"
                     v-if="this.validatePermission(['update-roles'])"
-                   size="small"
                   >
                     <i
                       class="mdi-marker mdi v-icon notranslate v-theme--light v-icon--size-default"

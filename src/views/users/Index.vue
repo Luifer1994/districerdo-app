@@ -43,8 +43,9 @@
                   <td>{{ user.roles[0].description }}</td>
                   <td>
                     <v-btn
-                      color="secondary"
-                      size="x-small"
+                    color="primary"
+                    density="compact"
+                    icon="mdi-pencil"
                       v-if="this.validatePermission(['users-update'])"
                       @click="editUser(user.id)"
                     >

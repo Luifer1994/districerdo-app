@@ -8,13 +8,13 @@
           v-bind="props"
           v-if="this.validatePermission(['products-create'])"
         >
-          Crear servicio
+          Crear producto
         </v-btn>
       </template>
       <v-card>
         <v-toolbar>
           <v-toolbar-title>
-            {{ ProductStore.Product.id ? "Editar servicio" : "Crear servicio" }}
+            {{ ProductStore.Product.id ? "Editar producto" : "Crear producto" }}
           </v-toolbar-title>
         </v-toolbar>
         <v-card-text>
@@ -90,7 +90,16 @@ let fields = ref([
     cols: 12 as number,
     rules: [(v) => !!v || "Este campo es requerido"] as Array<Function>,
     messaggeError: "" as string,
-  }
+  },
+  {
+    name: "minimum_stock" as string,
+    label: "Stock mínimo" as string,
+    type: "number" as string,
+    value: ref(ProductStore.Product.minimum_stock).value ?? 0,
+    cols: 12 as number,
+    rules: [(v) => !!v || "Este campo es requerido"] as Array<Function>,
+    messaggeError: "" as string,
+  },
 ]);
 
 async function submit() {

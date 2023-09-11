@@ -8,15 +8,15 @@
             <v-col cols="12" lg="4" md="6">
               <v-text-field
                 density="compact"
-                label="Buscar clientes"
+                label="Buscar proveedores"
                 hide-details
                 variant="outlined"
-                v-model="ClientStore.search"
-                @keyup.enter="ClientStore.searchClient()"
+                v-model="providerStore.search"
+                @keyup.enter="providerStore.searchprovider()"
               ></v-text-field>
             </v-col>
             <v-col cols="12" lg="8" md="6" class="text-right">
-              <ModalCeateClient></ModalCeateClient>
+              <ModalCreateProvider></ModalCreateProvider>
             </v-col>
           </v-row>
           <v-container fluid>
@@ -31,22 +31,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="client in ClientStore.clients" :key="client.id">
-                  <td>{{ client.full_name }}</td>
+                <tr v-for="provider in providerStore.providers" :key="provider.id">
+                  <td>{{ provider.full_name }}</td>
                   <td>
-                    {{ client.document_number }}
+                    {{ provider.document_number }}
                   </td>
-                  <td>{{ client.email }}</td>
-                  <td>{{ client.phone }}</td>
+                  <td>{{ provider.email }}</td>
+                  <td>{{ provider.phone }}</td>
                   <td>
                     <v-btn
                       color="primary"
                       density="compact"
                       icon="mdi-pencil"
-                      v-if="this.validatePermission(['clients-update'])"
+                      v-if="this.validatePermission(['providers-update'])"
                       @click="
-                        CityStore.searchCity(client.city.name),
-                          ClientStore.showClient(client.id)
+                        CityStore.searchCity(provider.city.name),
+                          providerStore.showprovider(provider.id)
                       "
                     >
                       <v-tooltip activator="parent" location="top">Editar</v-tooltip>
@@ -58,11 +58,11 @@
             </v-table>
             <v-divider color="primary" class="mt-4 mb-4"></v-divider>
             <v-pagination
-              v-model="ClientStore.currentPage"
-              :length="ClientStore.lastPage"
+              v-model="providerStore.currentPage"
+              :length="providerStore.lastPage"
               :total-visible="5"
               :show-first-last-page="true"
-              @update:modelValue="ClientStore.changePage($event)"
+              @update:modelValue="providerStore.changePage($event)"
               size="x-small"
             />
           </v-container>
@@ -75,21 +75,21 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
-import { useClientStore } from "@/stores/clients/clientStore";
+import { useproviderStore } from "@/stores/providers/providerStore";
 import { useCityStore } from "@/stores/cities/cityStore";
-import ModalCeateClient from "./ModalCeateClient.vue";
+import ModalCreateProvider from "./ModalCreateProvider.vue";
 
-const ClientStore = useClientStore();
+const providerStore = useproviderStore();
 const CityStore = useCityStore();
-const page = ref({ title: "Clientes" });
+const page = ref({ title: "Proveedores" });
 const breadcrumbs = ref([
   {
-    text: "Clientes",
+    text: "Proveedores",
     disabled: false,
     href: "#",
   },
   {
-    text: "Listado de clientes",
+    text: "Listado de proveedores",
     disabled: true,
     href: "#",
   },
@@ -97,6 +97,6 @@ const breadcrumbs = ref([
 
 //mounted
 onMounted(() => {
-  ClientStore.getClients();
+  providerStore.getproviders();
 });
 </script>

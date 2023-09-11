@@ -40,11 +40,14 @@ export const useProductStore = defineStore("ProductStore", {
     },
 
     //get all Products active
-    async getProductsActive() {
+    async getProductsActive(termine: string) {
+      if(!termine){
+        termine = "";
+      }
       this.loading = true;
       try {
         const response = await axiosHttp.get(
-          `/products/list-is-active?search=${this.searchActive}`
+          `/products/search?search=${termine}`
         );
         this.ProductsActive = response.data.data;
         const invoiceStore = useInvoiceStore();
@@ -68,6 +71,7 @@ export const useProductStore = defineStore("ProductStore", {
       try {
         const response = await axiosHttp.get(`/products/show/${id}`);
         this.Product = response.data.data;
+        console.log(this.Product);
         this.loading = false;
       } catch (error) {
         console.log(error);

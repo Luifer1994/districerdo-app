@@ -25,10 +25,22 @@ const sidebarItem: menu[] = [
     icon: "dollar-sign",
   },
   {
+    title: "Compras",
+    to: "/purchases",
+    permission: "purchases-module",
+    icon: "shopping-bag",
+  },
+  {
     title: "Clientes",
     to: "/clients",
     permission: "clients-module",
     icon: "users",
+  },
+  {
+    title: "Proveedores",
+    to: "/providers",
+    permission: "providers-module",
+    icon: "user-plus",
   },
   {
     title: "Productos",
