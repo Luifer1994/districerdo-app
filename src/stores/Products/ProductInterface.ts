@@ -36,4 +36,5 @@ export interface Item {
   description: string | null;
   price: number | null;
   quantity:number | null
+  batch: string | null;
 }

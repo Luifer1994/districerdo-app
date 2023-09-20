@@ -30,7 +30,6 @@ export const usePurchaseStore = defineStore("purchaseStore", {
         name: "",
         description: "",
         price: null as number | null,
-        is_active: true,
         quantity: null as number | null,
       } as Item,
       purchase: {} as DataGetPurchase,
@@ -112,6 +111,7 @@ export const usePurchaseStore = defineStore("purchaseStore", {
             await axiosHttp.put(`purchases/paid/${id}`);
             this.loading = false;
             await this.findPurchase(id);
+            await this.getPurchases();
           } catch (error) {
             this.loading = false;
           }
@@ -145,8 +145,6 @@ export const usePurchaseStore = defineStore("purchaseStore", {
         name: "",
         description: "",
         price: null,
-        is_active: true,
-        supplies: [],
         quantity: null,
       } as Item;
     },

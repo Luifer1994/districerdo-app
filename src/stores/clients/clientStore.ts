@@ -45,6 +45,21 @@ export const useClientStore = defineStore("clientStore", {
       }
     },
 
+    //search clients
+    async searchClients(termine:string) {
+      this.loading = true;
+      try {
+        const response = await axiosHttp.get(
+          `/clients/search?search=${termine}`
+        );
+        this.clients = response.data.data;
+        this.loading = false;
+      } catch (error) {
+        this.loading = false;
+        console.log(error);
+      }
+    },
+
     //create client
     async createClient() {
         this.loading = true;
@@ -56,7 +71,6 @@ export const useClientStore = defineStore("clientStore", {
             await this.getClients();
         } catch (error) {
             this.loading = false;
-            console.log(error);
         }
     },
 
@@ -74,8 +88,6 @@ export const useClientStore = defineStore("clientStore", {
         console.log(error);
       }
     },
-
-    //
     
     //update client
     async updateClient(id : Number) {

@@ -1,36 +1,30 @@
 <template>
   <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
-  <div v-if="PurchaseStore.purchase.id">
+  <div v-if="invoiceStore.invoice.id">
     <v-card>
       <v-card-text>
         <v-sheet>
           <h6 class="text-h6">
-            Proveedor: {{ PurchaseStore.purchase.provider.full_name }}
+            Cliente: {{ invoiceStore.invoice.client.full_name }}
           </h6>
           <h2 class="text-h6">
-            Fecha de compra: {{ PurchaseStore.purchase.created_at }}
+            Fecha de factura: {{ invoiceStore.invoice.created_at }}
           </h2>
           <h2 class="text-h6">
-            Estado de compra:
+            Estado de factura:
             <v-badge
-              :color="PurchaseStore.purchase.status === 'PENDIENTE' ? 'error' : 'success'"
-              :content="PurchaseStore.purchase.status"
+              :color="invoiceStore.invoice.state === 'Pendiente' ? 'error' : 'success'"
+              :content="invoiceStore.invoice.state"
               inline
             ></v-badge>
-          </h2>
-          <h2 class="text-h6">
-            Lote:
-            <span class="text-h6 font-weight-bold">
-              {{ PurchaseStore.purchase.purchase_lines[0].entrance.batch.code }}
-            </span>
           </h2>
         </v-sheet>
       </v-card-text>
     </v-card>
-    <h2 class="text-h5 font-weight-bold mx-2 my-4">Listado de productos de la compra</h2>
+    <h2 class="text-h5 font-weight-bold mx-2 my-4">Listado de productos de la factura</h2>
     <v-card
       class="mt-2"
-      v-for="(item, index) in PurchaseStore.purchase.purchase_lines"
+      v-for="(item, index) in invoiceStore.invoice.invoice_lines"
       :key="index"
     >
       <v-card-item>
@@ -77,7 +71,7 @@
             <span class="text-h5 font-weight-bold">Total:</span>
             <span class="text-h5 font-weight-bold">
               {{
-                PurchaseStore.purchase.total
+                invoiceStore.invoice.total
                   .toLocaleString("es-CO", { style: "currency", currency: "COP" })
                   .split(",")[0]
               }}
@@ -88,10 +82,10 @@
           class="mr-1 mt-2"
           color="primary"
           v-if="
-            PurchaseStore.purchase.status === 'PENDIENTE' &&
-            this.validatePermission(['purchases-update'])
+            invoiceStore.invoice.state === 'Pendiente' &&
+            this.validatePermission(['invoices-update'])
           "
-          @click="paidLocal(PurchaseStore.purchase.id)"
+          @click="invoiceStore.paidInvoice(invoiceStore.invoice.id)"
         >
           <v-tooltip activator="parent" location="top">MARCAR COMO PAGADA</v-tooltip>
           <v-icon>mdi-currency-usd</v-icon>
@@ -102,7 +96,7 @@
             class="mx-4 my-4"
             density="compact"
             color="primary"
-            :to="{ name: 'purchase-list' }"
+            :to="{ name: 'invoices-list' }"
           >
             <v-icon>mdi-arrow-left-bold </v-icon>
           </v-btn>
@@ -115,22 +109,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { usePurchaseStore } from "@/stores/purchases/purchaseStore";
+import { useInvoiceStore } from "@/stores/invoices/invoiceStore";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
-const page = ref({ title: "Detalle de compra" });
+const page = ref({ title: "Detalle de factura" });
 
-const PurchaseStore = usePurchaseStore();
+const invoiceStore = useInvoiceStore();
 const route = useRoute();
-
-async function paidLocal(id: Number) {
-  await PurchaseStore.paidPurchase(id);
-}
 
 onMounted(async () => {
   const id = route.params.id;
   if (typeof id === "string") {
     const numericId = parseInt(id);
-    await PurchaseStore.findPurchase(numericId);
+    await invoiceStore.getInvoice(numericId);
   }
 });
 </script>

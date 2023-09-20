@@ -1,4 +1,5 @@
 <template>
+  <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-card>
     <v-card-text class="pa-5">
       <v-row>
@@ -11,11 +12,7 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" lg="8" md="6" class="text-right">
-          <v-btn
-            color="primary"
-            class="white--text"
-            @click="InvoiceStore.newInvoice = true"
-          >
+          <v-btn color="primary" class="white--text" :to="{ name: 'invoices-create' }">
             <v-icon>mdi-plus</v-icon>
             <span class="hidden-sm-and-down">Crear factura</span>
           </v-btn>
@@ -28,9 +25,7 @@
               <th>N_FACTURA</th>
               <th>CLIENTE</th>
               <th>FECHA_CREACIÓN</th>
-              <th>TOTAL_SERVICIOS</th>
-              <th>TOTAL_SUMINISTROS</th>
-              <th>TOTAL_IVA</th>
+              <th>CANTIDAD_PRODUCTOS</th>
               <th>TOTAL_FACTURA</th>
               <th>ESTADO</th>
               <th>ACCIONES</th>
@@ -43,27 +38,7 @@
                 {{ invoice.client.full_name }}
               </td>
               <td>{{ invoice.created_at }}</td>
-              <td>
-                {{
-                  invoice.total_Products
-                    .toLocaleString("es-CO", { style: "currency", currency: "COP" })
-                    .split(",")[0]
-                }}
-              </td>
-              <td>
-                {{
-                  invoice.total_supplies
-                    .toLocaleString("es-CO", { style: "currency", currency: "COP" })
-                    .split(",")[0]
-                }}
-              </td>
-              <td>
-                {{
-                  invoice.total_tax
-                    .toLocaleString("es-CO", { style: "currency", currency: "COP" })
-                    .split(",")[0]
-                }}
-              </td>
+              <td>{{ invoice.invoice_lines_count }}</td>
               <td>
                 {{
                   invoice.total
@@ -75,7 +50,7 @@
                 <v-badge
                   :content="invoice.state"
                   :color="
-                    invoice.state === 'Borrador'
+                    invoice.state === 'Pendiente'
                       ? 'warning'
                       : invoice.state === 'Pagada'
                       ? 'success'
@@ -89,12 +64,45 @@
               </td>
               <td>
                 <v-btn
-                  color="secondary"
-                  size="x-small"
+                class="mr-1"
+                color="error"
+                density="compact"
+                icon="mdi-close"
+                :disabled="invoice.state === 'Pagada'"
+                @click="InvoiceStore.cancelInvoice(invoice.id)"
+                v-if="this.validatePermission(['invoices-update'])"
+              >
+                <v-tooltip activator="parent" location="top"
+                  >CANCELAR FACTURA</v-tooltip
+                >
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+                <v-btn
+                  class="mr-1"
+                  color="primary"
+                  density="compact"
+                  icon="mdi-currency-usd"
+                  :disabled="invoice.state === 'Pagada'"
+                  @click="InvoiceStore.paidInvoice(invoice.id)"
                   v-if="this.validatePermission(['invoices-update'])"
                 >
-                  <v-tooltip activator="parent" location="top">Editar</v-tooltip>
-                  <v-icon>mdi-pencil</v-icon>
+                  <v-tooltip activator="parent" location="top"
+                    >MARCAR COMO PAGADA</v-tooltip
+                  >
+                  <v-icon>mdi-currency-usd</v-icon>
+                </v-btn>
+                <v-btn
+                  color="warning"
+                  density="compact"
+                  icon="mdi-eye"
+                  :to="{
+                    name: 'invoices-detail',
+                    params: { id: invoice.id },
+                  }"
+                  v-if="this.validatePermission(['invoices-show'])"
+                >
+                  <v-tooltip activator="parent" location="top">Detalle</v-tooltip>
+                  <v-icon>mdi-eye</v-icon>
                 </v-btn>
               </td>
             </tr>
@@ -117,6 +125,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useInvoiceStore } from "@/stores/invoices/invoiceStore";
+import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
+const page = ref({ title: "Listado de facturas" });
 
 const InvoiceStore = useInvoiceStore();
 

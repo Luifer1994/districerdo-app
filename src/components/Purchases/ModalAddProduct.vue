@@ -171,7 +171,7 @@ async function addData() {
   purchaseStore.items = purchaseStore.items.filter((item) => item.id !== props.item.id);
   purchaseStore.items.push(props.item);
   ProductStore.ProductsActive = [];
-  ProductStore.getProductsActive();
+  ProductStore.getProductsActive('');
   purchaseStore.modalAddProduct = false;
 }
 </script>

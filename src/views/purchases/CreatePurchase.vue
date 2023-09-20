@@ -22,7 +22,7 @@
 
           <v-text-field
             density="compact"
-            label="Buscar servicio"
+            label="Buscar productos"
             hide-details
             variant="outlined"
             clearable

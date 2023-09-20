@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import axiosHttp from "../../utils/axios";
-import { Product, CreateProductResponse } from "./ProductInterface";
+import { Product, CreateProductResponse, Item } from "./ProductInterface";
 import { useInvoiceStore } from "../invoices/invoiceStore";
 
 export const useProductStore = defineStore("ProductStore", {
@@ -20,6 +20,7 @@ export const useProductStore = defineStore("ProductStore", {
     lastPage: ref(0),
     search: ref(""),
     searchActive: ref(""),
+    errorsValidateStock: [] as any,
   }),
   //actions
   actions: {
@@ -41,7 +42,7 @@ export const useProductStore = defineStore("ProductStore", {
 
     //get all Products active
     async getProductsActive(termine: string) {
-      if(!termine){
+      if (!termine) {
         termine = "";
       }
       this.loading = true;
@@ -50,11 +51,6 @@ export const useProductStore = defineStore("ProductStore", {
           `/products/search?search=${termine}`
         );
         this.ProductsActive = response.data.data;
-        const invoiceStore = useInvoiceStore();
-        this.ProductsActive = this.ProductsActive.filter(
-          (Product) =>
-            !invoiceStore.items.find((item) => item.id === Product.id)
-        );
         this.loading = false;
       } catch (error) {
         console.log(error);
@@ -112,6 +108,20 @@ export const useProductStore = defineStore("ProductStore", {
       this.currentPage = 1;
       await this.getProducts();
     },
+
+    async validateStock(item: Item) {
+      try {
+        await axiosHttp.post(`/products/validate-stock`, {
+          product_id: item.id,
+          quantity: item.quantity,
+          batch: item.batch,
+        });
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+
     resetProduct() {
       this.Product = {} as Product;
     },

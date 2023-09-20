@@ -3,14 +3,14 @@
     <v-card>
       <v-toolbar>
         <v-toolbar-title>
-          <span class="text-h5 font-weight-bold">Agregar servicio</span>
+          <span class="text-h5 font-weight-bold">Agregar producto</span>
         </v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <v-row>
           <v-col cols="12">
             <p class="text-subtitle-1">
-              Servicio:
+              producto:
               <span class="font-weight-bold">{{ item.name }}</span>
             </p>
             <p v-if="item.description">
@@ -22,7 +22,7 @@
             <v-text-field
               variant="outlined"
               density="compact"
-              label="Precio"
+              label="Precio unitario"
               hide-details
               prefix="$"
               min="1"
@@ -33,71 +33,34 @@
             ></v-text-field>
             <span class="text-caption text-red">{{ errors.priceProduct }}</span>
           </v-col>
-        </v-row>
-        <p>
-          <span class="text-h6">Insumos</span>
-        </p>
-        <v-divider></v-divider>
-        <v-row class="mt-2" v-for="(supplie, index) in item.supplies" :key="index">
-          <v-col cols="12" md="5">
-            <v-text-field
-              variant="outlined"
-              density="compact"
-              label="Nombre"
-              hide-details
-              v-model="supplie.name"
-              :rules="getValidationRules('name' + index, index)"
-            ></v-text-field>
-            <span class="text-caption text-red">{{ errors["name" + index] }}</span>
-          </v-col>
-
-          <v-col cols="8" md="4">
-            <v-text-field
-              variant="outlined"
-              density="compact"
-              label="Precio"
-              hide-details
-              prefix="$"
-              min="1"
-              type="text"
-              v-model="supplie.price"
-              @input="validateNumberInput('price', supplie)"
-              :rules="getValidationRules('price' + index, index)"
-            ></v-text-field>
-            <span class="text-caption text-red">{{ errors["price" + index] }}</span>
-          </v-col>
-
-          <v-col cols="4" md="2">
+          <v-col cols="12" md="6">
             <v-text-field
               variant="outlined"
               density="compact"
               label="Cantidad"
               hide-details
+              prefix="$"
+              min="1"
               type="text"
-              v-model="supplie.quantity"
-              @input="validateNumberInput('quantity', supplie)"
-              :rules="getValidationRules('quantity' + index, index)"
-              :error-messages="errors.quantity"
+              v-model="item.quantity"
+              @input="validateNumberInput('quantity', item)"
+              :rules="getValidationRules('quantityProduct', null)"
             ></v-text-field>
-            <span class="text-caption text-red">{{ errors["quantity" + index] }}</span>
+            <span class="text-caption text-red">{{ errors.quantityProduct }}</span>
           </v-col>
-
-          <v-col cols="12" md="1">
-            <div class="d-flex justify-end">
-              <v-sheet class="">
-                <v-btn icon color="error" size="small" @click="removeSupplie(supplie.id)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </v-sheet>
-            </div>
+          <v-col cols="12" md="6">
+            <v-text-field
+              variant="outlined"
+              density="compact"
+              label=" Lote"
+              hide-details
+              type="text"
+              v-model="item.batch"
+              :rules="getValidationRules('batch', null)"
+            ></v-text-field>
+            <span class="text-caption text-red">{{ errors.batch }}</span>
           </v-col>
-          <v-divider></v-divider>
         </v-row>
-
-        <v-btn class="mt-4" color="primary" @click="AddSupplie()">
-          <v-icon>mdi-plus</v-icon>
-          Insumo
-        </v-btn>
       </v-card-text>
 
       <v-divider color="primary" class="mt-4 mb-4"></v-divider>
@@ -126,7 +89,7 @@
 import { ref, defineProps } from "vue";
 import Swal from "sweetalert2";
 import { useInvoiceStore } from "../../stores/invoices/invoiceStore";
-import { Item, Supplie } from "../../stores/Products/ProductInterface";
+import { Item } from "../../stores/Products/ProductInterface";
 import { useProductStore } from "../../stores/Products/ProductStore";
 
 // Constants
@@ -143,37 +106,8 @@ interface Errors {
   price?: string;
   quantity?: string;
   priceProduct?: string;
-}
-
-// Add supplie
-function AddSupplie() {
-  props.item.supplies.push({
-    id: props.item.supplies.length + 1,
-    name: null,
-    price: null as number | null,
-    quantity: null as number | null,
-  });
-}
-
-// Remove supplie
-function removeSupplie(id: number) {
-  invoiceStore.modalAddProduct = false;
-  Swal.fire({
-    title: "¿Estas seguro?",
-    text: "No podrás revertir esto!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, eliminar!",
-    cancelButtonText: "Cancelar",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      props.item.supplies = props.item.supplies.filter((item: Supplie) => item.id !== id);
-      errors.value = {};
-    }
-    invoiceStore.modalAddProduct = true;
-  });
+  quantityProduct?: string;
+  batch?: string;
 }
 
 // Validate rules
@@ -206,12 +140,29 @@ function getValidationRules(field: string, index: number) {
           return true;
         },
       ];
+    case "quantityProduct":
     case "quantity" + index:
       return [
         (v: number | null) => {
+          if (!v) {
+            errors.value[field] = "Este campo es requerido";
+            return "Este campo es requerido";
+          }
           if (v === null || v == 0) {
             errors.value[field] = "La cantidad debe ser un número válido";
             return "La cantidad debe ser un número válido";
+          }
+          errors.value[field] = "";
+          return true;
+        },
+      ];
+
+    case "batch":
+      return [
+        (v: string | null) => {
+          if (!v) {
+            errors.value[field] = "Este campo es requerido";
+            return "Este campo es requerido";
           }
           errors.value[field] = "";
           return true;
@@ -235,33 +186,33 @@ async function addData() {
     errors.value.priceProduct = "Este campo es requerido";
     return;
   }
-
-  props.item.supplies.forEach((supplie, index) => {
-    errors.value["name" + index] =
-      supplie.name === null || supplie.name === "" ? "Este campo es requerido" : "";
-    errors.value["price" + index] =
-      supplie.price === null || supplie.price === 0 ? "Este campo es requerido" : "";
-    errors.value["quantity" + index] =
-      supplie.quantity === null || supplie.quantity === 0
-        ? "Este campo es requerido"
-        : "";
-  });
+  if (!props.item.quantity) {
+    errors.value.quantityProduct = "Este campo es requerido";
+    return;
+  }
+  if (!props.item.batch) {
+    errors.value.batch = "Este campo es requerido";
+    return;
+  }
 
   const hasErrors = Object.values(errors.value).some((error) => error !== "");
   if (hasErrors) {
     return;
   }
+  const validateStock = await ProductStore.validateStock(props.item);
 
-  props.item.price = Number(props.item.price);
-  props.item.supplies.forEach((supplie) => {
-    supplie.price = Number(supplie.price);
-    supplie.quantity = Number(supplie.quantity);
-  });
+  if (validateStock) {
+    props.item.price = Number(props.item.price);
+    // Filtrar elementos existentes con las mismas condiciones id y batch
+    invoiceStore.items = invoiceStore.items.filter(
+      (item) => item.id !== props.item.id || item.batch !== props.item.batch
+    );
+    // Luego, agregar el nuevo elemento
+    invoiceStore.items.push(props.item);
 
-  invoiceStore.items = invoiceStore.items.filter((item) => item.id !== props.item.id);
-  invoiceStore.items.push(props.item);
-  ProductStore.ProductsActive = [];
-  ProductStore.getProductsActive();
-  invoiceStore.modalAddProduct = false;
+    ProductStore.ProductsActive = [];
+    ProductStore.getProductsActive("");
+    invoiceStore.modalAddProduct = false;
+  }
 }
 </script>

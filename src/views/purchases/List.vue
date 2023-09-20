@@ -60,6 +60,7 @@
           <thead>
             <tr>
               <th>COD_COMPRA</th>
+              <th>LOTE</th>
               <th>PROVEEDOR</th>
               <th>FECHA_CREACIÓN</th>
               <th>CANT_PRODUCTOS</th>
@@ -71,6 +72,7 @@
           <tbody>
             <tr v-for="purchase in PurchaseStore.purchases" :key="purchase.id">
               <td>{{ purchase.code }}</td>
+              <td>{{ purchase.purchase_lines[0].entrance.batch.code }}</td>
               <td>
                 {{ purchase.provider.full_name }}
               </td>
