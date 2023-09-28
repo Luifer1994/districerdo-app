@@ -6,7 +6,7 @@
           prepend-icon="mdi-plus-circle"
           color="primary"
           v-bind="props"
-          v-if="validatePermission(['clients-create'])"
+          v-if="this.validatePermission(['clients-create'])"
           >Crear cliente</v-btn
         >
       </template>

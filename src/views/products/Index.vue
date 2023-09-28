@@ -62,7 +62,7 @@
                       color="primary"
                       density="compact"
                       icon="mdi-pencil"
-                      v-if="validatePermission(['products-update'])"
+                      v-if="this.validatePermission(['products-update'])"
                       @click="editProduct(Product.id)"
                     >
                       <v-tooltip activator="parent" location="top">Editar</v-tooltip>
