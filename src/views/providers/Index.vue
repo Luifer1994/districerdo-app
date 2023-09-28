@@ -78,6 +78,7 @@ import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import { useproviderStore } from "@/stores/providers/providerStore";
 import { useCityStore } from "@/stores/cities/cityStore";
 import ModalCreateProvider from "./ModalCreateProvider.vue";
+import { validatePermission } from "@/utils/validatePermission";
 
 const providerStore = useproviderStore();
 const CityStore = useCityStore();
