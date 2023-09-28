@@ -83,7 +83,7 @@
           color="primary"
           v-if="
             invoiceStore.invoice.state === 'Pendiente' &&
-            this.validatePermission(['invoices-update'])
+            validatePermission(['invoices-update'])
           "
           @click="invoiceStore.paidInvoice(invoiceStore.invoice.id)"
         >

@@ -6,7 +6,7 @@
           prepend-icon="mdi-account-multiple-plus"
           color="primary"
           v-bind="props"
-          v-if="this.validatePermission(['users-create'])"
+          v-if="validatePermission(['users-create'])"
           @click="DocumentTypesStore.getDocumentTypes(), RoleStore.getRoles()"
         >
           Crear usuario

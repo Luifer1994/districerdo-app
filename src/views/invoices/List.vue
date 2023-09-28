@@ -70,7 +70,7 @@
                 icon="mdi-close"
                 :disabled="invoice.state === 'Pagada'"
                 @click="InvoiceStore.cancelInvoice(invoice.id)"
-                v-if="this.validatePermission(['invoices-update'])"
+                v-if="validatePermission(['invoices-update'])"
               >
                 <v-tooltip activator="parent" location="top"
                   >CANCELAR FACTURA</v-tooltip
@@ -84,7 +84,7 @@
                   icon="mdi-currency-usd"
                   :disabled="invoice.state === 'Pagada'"
                   @click="InvoiceStore.paidInvoice(invoice.id)"
-                  v-if="this.validatePermission(['invoices-update'])"
+                  v-if="validatePermission(['invoices-update'])"
                 >
                   <v-tooltip activator="parent" location="top"
                     >MARCAR COMO PAGADA</v-tooltip
@@ -99,7 +99,7 @@
                     name: 'invoices-detail',
                     params: { id: invoice.id },
                   }"
-                  v-if="this.validatePermission(['invoices-show'])"
+                  v-if="validatePermission(['invoices-show'])"
                 >
                   <v-tooltip activator="parent" location="top">Detalle</v-tooltip>
                   <v-icon>mdi-eye</v-icon>

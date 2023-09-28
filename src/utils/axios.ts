@@ -5,7 +5,7 @@ import { useLoadingStore } from "@/stores/loadingStore";
 
 
 const axiosHttp = axios.create({
-  baseURL: "https://api.districerdott.com/api/",
+  baseURL: "http://127.0.0.1:8000/api/",
 });
 
 axiosHttp.interceptors.request.use(
