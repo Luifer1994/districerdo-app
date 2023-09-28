@@ -15,6 +15,7 @@ export default {
       const permissionsUser = user.permissions;
       const decode = atob(permissionsUser);
       const parse = JSON.parse(decode);
+      console.log(parse);
 
       const hasPermission = parse.some((p) => permissions.includes(p));
       return hasPermission;
