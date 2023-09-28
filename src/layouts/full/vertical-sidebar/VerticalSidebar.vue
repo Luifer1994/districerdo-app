@@ -34,7 +34,7 @@ const sidebarMenu = ref(sidebarItems);
     <perfect-scrollbar class="scrollnavbar">
       <v-list class="pa-4" color="transparent">
         <template v-for="(item, i) in sidebarMenu" :key="i">
-          <div v-if="this.$validatePermissions([item.permission])">
+          <div>
             <v-list-subheader v-if="item.header">{{ item.header }}</v-list-subheader>
             <v-list-group v-else-if="item.children" class="">
               <template v-slot:activator="{ props }">
