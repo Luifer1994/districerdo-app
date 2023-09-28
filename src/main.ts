@@ -9,14 +9,13 @@ import VueApexCharts from "vue3-apexcharts";
 import InstantSearch from "vue-instantsearch/vue3/es";
 import VCalendar from "v-calendar";
 import VueFeather from "vue-feather";
-import { validatePermission,userRole } from './utils/validatePermission';
+import validatePermissions from './plugins/validatePermissions';
 import Notifications from '@kyvg/vue3-notification';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 const app = createApp(App);
 app.component(VueFeather.name, VueFeather);
-app.config.globalProperties.validatePermission = validatePermission;
-app.config.globalProperties.userRole = userRole;
+app.use(validatePermissions);
 app.use(PerfectScrollbar);
 app.use(InstantSearch);
 app.use(createPinia());

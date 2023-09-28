@@ -43,7 +43,7 @@
                       color="primary"
                       density="compact"
                       icon="mdi-pencil"
-                      v-if="this.validatePermission(['clients-update'])"
+                      v-if="$validatePermissions(['clients-update'])"
                       @click="
                         CityStore.searchCity(client.city.name),
                           ClientStore.showClient(client.id)

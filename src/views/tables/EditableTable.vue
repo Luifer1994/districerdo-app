@@ -114,7 +114,7 @@ const breadcrumbs = ref([
             <v-col cols="12" lg="8" md="6" class="text-right">
               <v-dialog v-model="dialog">
                 <template v-slot:activator="{ props }">
-                  <v-btn color="primary" v-bind="props" class="ml-auto" v-if="this.validatePermission(['test','users-list'])">
+                  <v-btn color="primary" v-bind="props" class="ml-auto" v-if="$validatePermissions(['test','users-list'])">
                     <v-icon class="mr-2">mdi-account-multiple-plus</v-icon>Add
                     Contact
                   </v-btn>

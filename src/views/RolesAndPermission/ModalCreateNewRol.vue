@@ -6,7 +6,7 @@
           prepend-icon="mdi-plus-circle"
           color="primary"
           v-bind="props"
-          v-if="this.validatePermission(['create-roles'])"
+          v-if="$validatePermissions(['create-roles'])"
           >Crear rol</v-btn
         >
       </template>

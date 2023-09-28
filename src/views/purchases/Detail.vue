@@ -89,7 +89,7 @@
           color="primary"
           v-if="
             PurchaseStore.purchase.status === 'PENDIENTE' &&
-            this.validatePermission(['purchases-update'])
+            $validatePermissions(['purchases-update'])
           "
           @click="paidLocal(PurchaseStore.purchase.id)"
         >

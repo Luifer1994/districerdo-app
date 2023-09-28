@@ -6,7 +6,7 @@
           prepend-icon="mdi-plus"
           color="primary"
           v-bind="props"
-          v-if="this.validatePermission(['products-create'])"
+          v-if="$validatePermissions(['products-create'])"
         >
           Crear producto
         </v-btn>
