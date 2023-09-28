@@ -83,7 +83,7 @@
           color="primary"
           v-if="
             invoiceStore.invoice.state === 'Pendiente' &&
-            this.$validatePermissions(['invoices-update'])
+            validatePermission(['invoices-update'])
           "
           @click="invoiceStore.paidInvoice(invoiceStore.invoice.id)"
         >
@@ -111,6 +111,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useInvoiceStore } from "@/stores/invoices/invoiceStore";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
+import { validatePermission } from "@/utils/validatePermission";
 const page = ref({ title: "Detalle de factura" });
 
 const invoiceStore = useInvoiceStore();

@@ -47,7 +47,7 @@
             color="primary"
             class="white--text"
             @click="$router.push({ name: 'purchase-create' })"
-            v-if="this.$validatePermissions(['purchases-create'])"
+            v-if="validatePermission(['purchases-create'])"
           >
             <v-tooltip activator="parent" location="top"> Registrar compra </v-tooltip>
             <v-icon>mdi-plus</v-icon>
@@ -103,7 +103,7 @@
                   icon="mdi-currency-usd"
                   :disabled="purchase.status === 'PAGADA'"
                   @click="PurchaseStore.paidPurchase(purchase.id)"
-                  v-if="this.$validatePermissions(['purchases-update'])"
+                  v-if="validatePermission(['purchases-update'])"
                 >
                   <v-tooltip activator="parent" location="top"
                     >MARCAR COMO PAGADA</v-tooltip
@@ -118,7 +118,7 @@
                     name: 'purchase-detail',
                     params: { id: purchase.id },
                   }"
-                  v-if="this.$validatePermissions(['purchases-show'])"
+                  v-if="validatePermission(['purchases-show'])"
                 >
                   <v-tooltip activator="parent" location="top">Detalle</v-tooltip>
                   <v-icon>mdi-eye</v-icon>
@@ -145,7 +145,7 @@
 import { ref, onMounted, watch } from "vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-
+import { validatePermission } from "@/utils/validatePermission";
 import { usePurchaseStore } from "@/stores/purchases/purchaseStore";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 const page = ref({ title: "Listado de compra" });

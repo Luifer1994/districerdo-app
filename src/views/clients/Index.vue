@@ -43,7 +43,7 @@
                       color="primary"
                       density="compact"
                       icon="mdi-pencil"
-                      v-if="this.$validatePermissions(['clients-update'])"
+                      v-if="validatePermission(['clients-update'])"
                       @click="
                         CityStore.searchCity(client.city.name),
                           ClientStore.showClient(client.id)
@@ -78,6 +78,7 @@ import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import { useClientStore } from "@/stores/clients/clientStore";
 import { useCityStore } from "@/stores/cities/cityStore";
 import ModalCeateClient from "./ModalCeateClient.vue";
+import { validatePermission } from "@/utils/validatePermission";
 
 const ClientStore = useClientStore();
 const CityStore = useCityStore();

@@ -6,7 +6,7 @@
           prepend-icon="mdi-plus"
           color="primary"
           v-bind="props"
-          v-if="this.$validatePermissions(['products-create'])"
+          v-if="validatePermission(['products-create'])"
         >
           Crear producto
         </v-btn>
@@ -43,6 +43,7 @@ import { useProductStore } from "@/stores/Products/ProductStore";
 import { useCategoryStore } from "@/stores/categories/categoryStore";
 import { Product } from "@/stores/Products/ProductInterface";
 import Form from "@/components/Forms/Form.vue";
+import { validatePermission } from "@/utils/validatePermission";
 
 const ProductStore = useProductStore();
 const CategoryStore = useCategoryStore();

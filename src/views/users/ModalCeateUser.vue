@@ -6,7 +6,7 @@
           prepend-icon="mdi-account-multiple-plus"
           color="primary"
           v-bind="props"
-          v-if="this.$validatePermissions(['users-create'])"
+          v-if="validatePermission(['users-create'])"
           @click="DocumentTypesStore.getDocumentTypes(), RoleStore.getRoles()"
         >
           Crear usuario
@@ -198,6 +198,7 @@ import * as yup from "yup";
 import { useDocumentTypesStore } from "@/stores/documentTypes/documentTypesStore";
 import { useUserStore } from "@/stores/users/userStore";
 import { useRolesAndPermissionsStore } from "@/stores/rolesAndPermissions/rolesAndPermissionsStore";
+import { validatePermission } from "@/utils/validatePermission";
 
 const DocumentTypesStore = useDocumentTypesStore();
 const UserStore = useUserStore();

@@ -4,7 +4,7 @@ import { useCustomizerStore } from "@/stores/customizer";
 import sidebarItems from "./sidebarItem";
 import LogoLight from "../logo/LogoLight.vue";
 import LogoDark from "../logo/LogoDark.vue";
-import { validatePermission } from "../../../utils/validatePermission";
+import { validatePermission } from "@/utils/validatePermission";
 
 
 const customizer = useCustomizerStore();
@@ -38,13 +38,13 @@ const sidebarMenu = ref(sidebarItems);
         <template v-for="(item, i) in sidebarMenu" :key="i">
           <div v-if="validatePermission([item.permission])">
             <v-list-subheader v-if="item.header">{{ item.header }}</v-list-subheader>
-            <v-list-group v-else-if="item.children" class="">
+            <v-list-group v-else-if="item.children">
               <template v-slot:activator="{ props }">
                 <v-list-item v-bind="props" :value="item.title" rounded="lg" class="mb-1">
                   <template v-slot:prepend>
                     <vue-feather
                       :type="item.icon"
-                      class="feather-sm v-icon"
+                      class="feather-sm mr-2"
                     ></vue-feather>
                   </template>
                   <v-list-item-title v-text="item.title"></v-list-item-title>
@@ -55,13 +55,13 @@ const sidebarMenu = ref(sidebarItems);
                   :value="subitem.to"
                   :to="subitem.to"
                   rounded="lg"
-                  class="first-level-item mb-1"
+                  class="first-level-item mb-1 p-0"
                   v-if="validatePermission([subitem.permission])"
                 >
                   <template v-slot:prepend>
                     <vue-feather
                       :type="subitem.icon"
-                      class="feather-sm v-icon v-icon--size-default"
+                      class="feather-sm mr-2"
                     ></vue-feather>
                   </template>
                   <v-list-item-title v-text="subitem.title"></v-list-item-title>
@@ -72,7 +72,7 @@ const sidebarMenu = ref(sidebarItems);
               <template v-slot:prepend>
                 <vue-feather
                   :type="item.icon"
-                  class="feather-sm v-icon v-icon--size-default"
+                  class="feather-sm mr-2"
                 ></vue-feather>
               </template>
               <v-list-item-title v-text="item.title"></v-list-item-title>

@@ -46,7 +46,7 @@
                     color="primary"
                     density="compact"
                     icon="mdi-pencil"
-                      v-if="this.$validatePermissions(['users-update'])"
+                      v-if="validatePermission(['users-update'])"
                       @click="editUser(user.id)"
                     >
                       <v-tooltip activator="parent" location="top">Editar</v-tooltip>
@@ -78,6 +78,7 @@ import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import { useUserStore } from "@/stores/users/userStore";
 import { useRolesAndPermissionsStore } from "@/stores/rolesAndPermissions/rolesAndPermissionsStore";
 import {useDocumentTypesStore}from "@/stores/documentTypes/documentTypesStore";
+import { validatePermission } from "@/utils/validatePermission";
 
 import ModalCeateUser from "./ModalCeateUser.vue";
 

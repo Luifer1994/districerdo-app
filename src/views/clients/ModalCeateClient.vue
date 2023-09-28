@@ -6,7 +6,7 @@
           prepend-icon="mdi-plus-circle"
           color="primary"
           v-bind="props"
-          v-if="this.$validatePermissions(['clients-create'])"
+          v-if="validatePermission(['clients-create'])"
           >Crear cliente</v-btn
         >
       </template>
@@ -192,6 +192,7 @@ import * as yup from "yup";
 import { useDocumentTypesStore } from "@/stores/documentTypes/documentTypesStore";
 import { useCityStore } from "@/stores/cities/cityStore";
 import { useClientStore } from "@/stores/clients/clientStore";
+import { validatePermission } from "@/utils/validatePermission";
 
 const DocumentTypesStore = useDocumentTypesStore();
 const CityStore = useCityStore();

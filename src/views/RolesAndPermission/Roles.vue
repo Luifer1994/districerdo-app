@@ -46,7 +46,7 @@
                   density="compact"
                   icon="mdi-pencil"
                     @click="getRoleById(item.id)"
-                    v-if="this.$validatePermissions(['update-roles'])"
+                    v-if="validatePermission(['update-roles'])"
                   >
                     <i
                       class="mdi-marker mdi v-icon notranslate v-theme--light v-icon--size-default"
@@ -67,6 +67,7 @@ import { ref, onMounted } from "vue";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import ModalCreateNewRol from "./ModalCreateNewRol.vue";
 import { useRolesAndPermissionsStore } from "@/stores/rolesAndPermissions/rolesAndPermissionsStore";
+import { validatePermission } from "@/utils/validatePermission";
 const RoleAndPermissionStore = useRolesAndPermissionsStore();
 
 //mounted

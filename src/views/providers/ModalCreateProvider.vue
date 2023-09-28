@@ -6,7 +6,7 @@
           prepend-icon="mdi-plus-circle"
           color="primary"
           v-bind="props"
-          v-if="this.$validatePermissions(['providers-create'])"
+          v-if="validatePermission(['providers-create'])"
           >Crear proveedor</v-btn
         >
       </template>
@@ -192,6 +192,7 @@ import * as yup from "yup";
 import { useDocumentTypesStore } from "@/stores/documentTypes/documentTypesStore";
 import { useCityStore } from "@/stores/cities/cityStore";
 import { useproviderStore } from "@/stores/providers/providerStore";
+import { validatePermission } from "@/utils/validatePermission";
 
 const DocumentTypesStore = useDocumentTypesStore();
 const CityStore = useCityStore();

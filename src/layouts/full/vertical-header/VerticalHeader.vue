@@ -60,7 +60,7 @@
               {{ authStore.userLoged.name }}
             </h4>
             <span class="subtitle-2 font-weight-light">
-              {{ this.$userRole() }}
+              {{ userRole() }}
             </span>
             <div class="d-flex align-center">
               <vue-feather type="mail" size="16" class="d-flex grey--text"></vue-feather>
@@ -95,6 +95,7 @@
 import { ref, watch } from "vue";
 import { useCustomizerStore } from "@/stores/customizer";
 import { useAuthStore } from "@/stores/auth/authStore";
+import { userRole } from "@/utils/validatePermission";
 const customizer = useCustomizerStore();
 const authStore = useAuthStore();
 const showSearch = ref(false);

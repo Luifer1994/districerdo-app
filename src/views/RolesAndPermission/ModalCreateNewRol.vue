@@ -6,7 +6,7 @@
           prepend-icon="mdi-plus-circle"
           color="primary"
           v-bind="props"
-          v-if="this.$validatePermissions(['create-roles'])"
+          v-if="validatePermission(['create-roles'])"
           >Crear rol</v-btn
         >
       </template>
@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Form, Field } from "vee-validate";
+import { validatePermission } from "@/utils/validatePermission";
 import * as yup from "yup";
 import { useRolesAndPermissionsStore } from "@/stores/rolesAndPermissions/rolesAndPermissionsStore";
 const RoleAndPermissionStore = useRolesAndPermissionsStore();

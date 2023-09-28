@@ -62,7 +62,7 @@
                       color="primary"
                       density="compact"
                       icon="mdi-pencil"
-                      v-if="this.$validatePermissions(['products-update'])"
+                      v-if="validatePermission(['products-update'])"
                       @click="editProduct(Product.id)"
                     >
                       <v-tooltip activator="parent" location="top">Editar</v-tooltip>
@@ -94,6 +94,7 @@ import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import { useProductStore } from "@/stores/Products/ProductStore";
 import { useCategoryStore } from "@/stores/categories/categoryStore";
 import ModalCreateProduct from "./ModalCreateProduct.vue";
+import { validatePermission } from "@/utils/validatePermission";
 
 const ProductStore = useProductStore();
 const CategoryStore = useCategoryStore();

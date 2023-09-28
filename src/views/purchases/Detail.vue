@@ -89,7 +89,7 @@
           color="primary"
           v-if="
             PurchaseStore.purchase.status === 'PENDIENTE' &&
-            this.$validatePermissions(['purchases-update'])
+            validatePermission(['purchases-update'])
           "
           @click="paidLocal(PurchaseStore.purchase.id)"
         >
@@ -117,6 +117,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { usePurchaseStore } from "@/stores/purchases/purchaseStore";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
+import { validatePermission } from "@/utils/validatePermission";
 const page = ref({ title: "Detalle de compra" });
 
 const PurchaseStore = usePurchaseStore();
