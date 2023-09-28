@@ -171,13 +171,8 @@
   </v-form>
 </template>
 
-<script>
-export default {
-  props: {
-    fields: {
-      type: Array,
-      required: true,
-    },
-  },
-};
+<script setup lang="ts">
+const props = defineProps({
+  fields: Array as any
+});
 </script>
