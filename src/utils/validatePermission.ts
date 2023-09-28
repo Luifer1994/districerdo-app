@@ -38,7 +38,7 @@ export const userRole = () : string => {
  * @param permission 
  * @returns Boolean
  */
-export function validatePermission(permission: string[]) : boolean {
+export const validatePermission =(permission: string[]) : boolean => {
     const userPermissions = permissions();
     const hasPermission = userPermissions.some((p) => permission.includes(p));
     return hasPermission;

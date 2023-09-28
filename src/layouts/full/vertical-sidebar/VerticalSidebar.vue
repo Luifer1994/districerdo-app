@@ -4,6 +4,8 @@ import { useCustomizerStore } from "@/stores/customizer";
 import sidebarItems from "./sidebarItem";
 import LogoLight from "../logo/LogoLight.vue";
 import LogoDark from "../logo/LogoDark.vue";
+import { validatePermission } from "../../../utils/validatePermission";
+
 
 const customizer = useCustomizerStore();
 const sidebarMenu = ref(sidebarItems);
@@ -34,7 +36,7 @@ const sidebarMenu = ref(sidebarItems);
     <perfect-scrollbar class="scrollnavbar">
       <v-list class="pa-4" color="transparent">
         <template v-for="(item, i) in sidebarMenu" :key="i">
-          <div v-if="this.$validatePermissions([item.permission])">
+          <div v-if="validatePermission([item.permission])">
             <v-list-subheader v-if="item.header">{{ item.header }}</v-list-subheader>
             <v-list-group v-else-if="item.children" class="">
               <template v-slot:activator="{ props }">
@@ -54,7 +56,7 @@ const sidebarMenu = ref(sidebarItems);
                   :to="subitem.to"
                   rounded="lg"
                   class="first-level-item mb-1"
-                  v-if="this.$validatePermissions([subitem.permission])"
+                  v-if="validatePermission([subitem.permission])"
                 >
                   <template v-slot:prepend>
                     <vue-feather
@@ -81,6 +83,7 @@ const sidebarMenu = ref(sidebarItems);
     </perfect-scrollbar>
   </v-navigation-drawer>
 </template>
+
 <style scoped>
 .v-list-item--density-default.v-list-item--one-line {
   min-height: 30px;
