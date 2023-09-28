@@ -34,7 +34,7 @@ const sidebarMenu = ref(sidebarItems);
     <perfect-scrollbar class="scrollnavbar">
       <v-list class="pa-4" color="transparent">
         <template v-for="(item, i) in sidebarMenu" :key="i">
-          <div v-if="validatePermission([item.permission])">
+          <div v-if="this.validatePermission([item.permission])">
             <v-list-subheader v-if="item.header">{{ item.header }}</v-list-subheader>
             <v-list-group v-else-if="item.children" class="">
               <template v-slot:activator="{ props }">
@@ -54,7 +54,7 @@ const sidebarMenu = ref(sidebarItems);
                   :to="subitem.to"
                   rounded="lg"
                   class="first-level-item mb-1"
-                  v-if="validatePermission([subitem.permission])"
+                  v-if="this.validatePermission([subitem.permission])"
                 >
                   <template v-slot:prepend>
                     <vue-feather
