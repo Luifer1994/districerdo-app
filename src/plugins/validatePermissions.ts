@@ -1,10 +1,11 @@
 //create plugin vue 3
 import { UserLogedInterface } from "@/stores/auth/authInterfaces";
 export default {
-  install: (app, options) => {
+  install: (app) => {
     (app.config.globalProperties.$validatePermissions = (
       permissions: string[]
     ): boolean => {
+
       const user = JSON.parse(
         localStorage.getItem("userLoged") || "{}"
       ) as UserLogedInterface;
@@ -15,8 +16,6 @@ export default {
       const permissionsUser = user.permissions;
       const decode = atob(permissionsUser);
       const parse = JSON.parse(decode);
-      console.log(parse);
-
       const hasPermission = parse.some((p) => permissions.includes(p));
       return hasPermission;
     }),
