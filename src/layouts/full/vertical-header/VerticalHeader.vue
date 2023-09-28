@@ -60,7 +60,7 @@
               {{ authStore.userLoged.name }}
             </h4>
             <span class="subtitle-2 font-weight-light">
-              {{ $userRole() }}
+              {{ this.$userRole() }}
             </span>
             <div class="d-flex align-center">
               <vue-feather type="mail" size="16" class="d-flex grey--text"></vue-feather>

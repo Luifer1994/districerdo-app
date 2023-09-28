@@ -43,7 +43,7 @@
                       color="primary"
                       density="compact"
                       icon="mdi-pencil"
-                      v-if="$validatePermissions(['providers-update'])"
+                      v-if="this.$validatePermissions(['providers-update'])"
                       @click="
                         CityStore.searchCity(provider.city.name),
                           providerStore.showprovider(provider.id)

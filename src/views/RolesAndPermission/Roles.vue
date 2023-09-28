@@ -46,7 +46,7 @@
                   density="compact"
                   icon="mdi-pencil"
                     @click="getRoleById(item.id)"
-                    v-if="$validatePermissions(['update-roles'])"
+                    v-if="this.$validatePermissions(['update-roles'])"
                   >
                     <i
                       class="mdi-marker mdi v-icon notranslate v-theme--light v-icon--size-default"

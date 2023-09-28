@@ -46,7 +46,7 @@
                     color="primary"
                     density="compact"
                     icon="mdi-pencil"
-                      v-if="$validatePermissions(['users-update'])"
+                      v-if="this.$validatePermissions(['users-update'])"
                       @click="editUser(user.id)"
                     >
                       <v-tooltip activator="parent" location="top">Editar</v-tooltip>

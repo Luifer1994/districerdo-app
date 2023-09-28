@@ -6,7 +6,7 @@
           prepend-icon="mdi-plus-circle"
           color="primary"
           v-bind="props"
-          v-if="$validatePermissions(['providers-create'])"
+          v-if="this.$validatePermissions(['providers-create'])"
           >Crear proveedor</v-btn
         >
       </template>
