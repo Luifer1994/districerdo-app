@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter,  createWebHashHistory } from "vue-router";
 import { useAuthStore } from "@/stores/auth/authStore";
 import { validatePermission } from "../utils/validatePermission";
 
 const router = createRouter({
   //history: createWebHistory(import.meta.env.BASE_URL),
-  history: createWebHistory("/"),
+  history: createWebHashHistory('/'),
   routes: [
     {
       path: "/",
