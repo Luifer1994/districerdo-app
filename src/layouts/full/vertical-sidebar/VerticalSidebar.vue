@@ -54,7 +54,7 @@ const sidebarMenu = ref(sidebarItems);
                   :to="subitem.to"
                   rounded="lg"
                   class="first-level-item mb-1"
-                  v-if="this.$validatePermissions([subitem.permission])"
+                  
                 >
                   <template v-slot:prepend>
                     <vue-feather
