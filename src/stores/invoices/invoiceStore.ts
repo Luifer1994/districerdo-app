@@ -50,7 +50,6 @@ export const useInvoiceStore = defineStore("invoiceStore", {
     async getInvoices() {
       this.loading = true;
       try {
-
         let dateStart = "";
         let dateEnd = "";
 
@@ -207,7 +206,6 @@ export const useInvoiceStore = defineStore("invoiceStore", {
       }
     },
 
-
     //reset all data
     cancelCreateInvoice() {
       this.errors = {};
@@ -221,6 +219,12 @@ export const useInvoiceStore = defineStore("invoiceStore", {
           price: null as number | null,
           quantity: null as number | null,
         } as Item);
+    },
+    formateDate(date: Date) {
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
     },
   },
 });
