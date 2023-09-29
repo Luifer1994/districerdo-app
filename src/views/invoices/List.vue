@@ -36,6 +36,7 @@
             v-model="InvoiceStore.dates"
             range
             locale="es"
+            teleport-center
           ></VueDatePicker>
         </v-col>
         <v-col cols="3" lg="1" md="2">
