@@ -1,5 +1,5 @@
 <template>
-  <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+  <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-row>
     <v-col cols="12" sm="12">
       <v-card>
@@ -99,18 +99,6 @@ import { validatePermission } from "@/utils/validatePermission";
 const ProductStore = useProductStore();
 const CategoryStore = useCategoryStore();
 const page = ref({ title: "Productos" });
-const breadcrumbs = ref([
-  {
-    text: "Servicios",
-    disabled: false,
-    href: "#",
-  },
-  {
-    text: "Listado de servicios",
-    disabled: true,
-    href: "#",
-  },
-]);
 
 async function editProduct(id: Number) {
   await ProductStore.getProductById(id);
@@ -123,8 +111,3 @@ onMounted(() => {
   CategoryStore.getCategories();
 });
 </script>
-<!-- <style>
-.v-badge__badge {
-  padding: 4px 8px;
-}
-</style> -->

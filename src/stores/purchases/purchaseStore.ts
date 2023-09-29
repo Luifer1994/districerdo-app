@@ -85,10 +85,10 @@ export const usePurchaseStore = defineStore("purchaseStore", {
     async createPurchase(newPurchase: NewPurchase) {
       this.loading = true;
       try {
-        await axiosHttp.post<Purchase>(`purchases/create`, newPurchase);
+      const res =  await axiosHttp.post(`purchases/create`, newPurchase);
         this.loading = false;
         this.cancelCreatePurchase();
-        await this.getPurchases();
+        return res.data.data.id;
       } catch (error) {
         this.loading = false;
       }

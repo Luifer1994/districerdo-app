@@ -1,5 +1,5 @@
 <template>
-  <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+  <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-row>
     <v-col cols="12" sm="12">
       <v-card>
@@ -75,19 +75,7 @@ onMounted(() => {
   RoleAndPermissionStore.getRoles();
 });
 
-const page = ref({ title: "Configuración" });
-const breadcrumbs = ref([
-  {
-    text: "Seguridad",
-    disabled: false,
-    href: "#",
-  },
-  {
-    text: "Listado de roles",
-    disabled: true,
-    href: "#",
-  },
-]);
+const page = ref({ title: "Roles" });
 
 //getRoleById
 const getRoleById = (id: number) => {

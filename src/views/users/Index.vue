@@ -1,5 +1,5 @@
 <template>
-  <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+  <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-row>
     <v-col cols="12" sm="12">
       <v-card>
@@ -86,18 +86,7 @@ const UserStore = useUserStore();
 const rolesAndPermissions = useRolesAndPermissionsStore();
 const documentTypes = useDocumentTypesStore();
 const page = ref({ title: "Usuarios" });
-const breadcrumbs = ref([
-  {
-    text: "Usuarios",
-    disabled: false,
-    href: "#",
-  },
-  {
-    text: "Listado de usuarios",
-    disabled: true,
-    href: "#",
-  },
-]);
+
 async function editUser(id: number) {
   await UserStore.getUserById(id);
   await rolesAndPermissions.getRoles();

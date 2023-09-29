@@ -64,19 +64,19 @@
               </td>
               <td>
                 <v-btn
-                class="mr-1"
-                color="error"
-                density="compact"
-                icon="mdi-close"
-                :disabled="invoice.state === 'Pagada'"
-                @click="InvoiceStore.cancelInvoice(invoice.id)"
-                v-if="validatePermission(['invoices-update'])"
-              >
-                <v-tooltip activator="parent" location="top"
-                  >CANCELAR FACTURA</v-tooltip
+                  class="mr-1"
+                  color="error"
+                  density="compact"
+                  icon="mdi-close"
+                  :disabled="invoice.state === 'Pagada'"
+                  @click="InvoiceStore.cancelInvoice(invoice.id)"
+                  v-if="validatePermission(['invoices-update'])"
                 >
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
+                  <v-tooltip activator="parent" location="top"
+                    >CANCELAR FACTURA</v-tooltip
+                  >
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
                 <v-btn
                   class="mr-1"
                   color="primary"
@@ -92,6 +92,7 @@
                   <v-icon>mdi-currency-usd</v-icon>
                 </v-btn>
                 <v-btn
+                  class="mr-1"
                   color="warning"
                   density="compact"
                   icon="mdi-eye"
@@ -103,6 +104,12 @@
                 >
                   <v-tooltip activator="parent" location="top">Detalle</v-tooltip>
                   <v-icon>mdi-eye</v-icon>
+                </v-btn>
+                <v-btn color="success" density="compact" icon="mdi-file-document" @click="InvoiceStore.downloadInvoice(invoice.id)" v-if="validatePermission(['invoices-download'])">
+                  <v-tooltip activator="parent" location="top"
+                    >Descargar factura</v-tooltip
+                  >
+                  <v-icon> mdi-file-document </v-icon>
                 </v-btn>
               </td>
             </tr>

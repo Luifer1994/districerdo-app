@@ -7,33 +7,35 @@
           <v-row>
             <v-col cols="12">
               <v-autocomplete
-              density="compact"
-              label="Buscar cliente"
-              :items="ClientStore.clients"
-              variant="outlined"
-              item-title="full_name"
-              item-value="id"
-              clearable
-              append-inner-icon="mdi-magnify"
-              v-model="invoiceStore.newInvoiceData.client_id"
-              v-model:search="ClientStore.search"
-              @click:append-inner="ClientStore.searchClients(ClientStore.search)"
-              @keyup.enter="ClientStore.searchClients(ClientStore.search)"
-              :rules="[(v) => !!v || 'Seleccione un cliente']"
+                density="compact"
+                label="Buscar cliente"
+                :items="ClientStore.clients"
+                variant="outlined"
+                item-title="full_name"
+                item-value="id"
+                clearable
+                append-inner-icon="mdi-magnify"
+                v-model="invoiceStore.newInvoiceData.client_id"
+                v-model:search="ClientStore.search"
+                @click:append-inner="ClientStore.searchClients(ClientStore.search)"
+                @keyup.enter="ClientStore.searchClients(ClientStore.search)"
+                :rules="[(v) => !!v || 'Seleccione un cliente']"
               >
                 <template v-slot:append>
                   <ModalCeateClient
-                  style="visibility: hidden;"
-                  v-if="ClientStore.modalNewClientActive"
+                    style="visibility: hidden"
+                    v-if="ClientStore.modalNewClientActive"
                   ></ModalCeateClient>
-                  <v-btn @click="ClientStore.modalNewClientActive=true">
-                    <v-tooltip activator="parent" location="top">Registrar cliente</v-tooltip>
+                  <v-btn @click="ClientStore.modalNewClientActive = true">
+                    <v-tooltip activator="parent" location="top"
+                      >Registrar cliente</v-tooltip
+                    >
                     <v-icon>mdi-account-plus</v-icon>
                   </v-btn>
                 </template>
               </v-autocomplete>
             </v-col>
-           
+
             <v-col cols lg="12" md="12" xl="12" xxl="12">
               <v-text-field
                 density="compact"
@@ -81,7 +83,6 @@
           <div class="d-flex flex-row-reverse">
             <v-sheet class="ma-2">
               <h2 class="pa-1 font-weight-bold">Listado de productos a facturar</h2>
-              {{ invoiceStore.items }}
               <v-card
                 class="mt-2"
                 v-for="(item, index) in invoiceStore.items"
@@ -174,14 +175,28 @@
                       item-title="text"
                       item-value="value"
                     ></v-select>
+                    <p
+                      class="text-caption"
+                      style="color: red"
+                      v-if="
+                        !invoiceStore.newInvoiceData.client_id ||
+                        !invoiceStore.items.length
+                      "
+                    >
+                      Debes seleccionar un cliente y al menos un producto para poder
+                      guardar
+                    </p>
                     <v-btn
                       color="error"
                       class="mr-1 mt-1 pr-7"
-                      @click="invoiceStore.cancelCreateInvoice(),
-                      this.$router.push({ name: 'invoices-list' })"
+                      @click="
+                        invoiceStore.cancelCreateInvoice(),
+                          this.$router.push({ name: 'invoices-list' })
+                      "
                     >
                       <v-icon>mdi-close-circle</v-icon>CANCELAR FACTURA
                     </v-btn>
+
                     <v-btn
                       color="success"
                       class="mt-1"
@@ -206,7 +221,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
 import Swal from "sweetalert2";
 import ModalAddProduct from "@/components/Invoices/ModalAddProduct.vue";
 import ModalCeateClient from "@/views/clients/ModalCeateClient.vue";
@@ -215,6 +230,10 @@ import { useProductStore } from "../../stores/Products/ProductStore";
 import { useClientStore } from "../../stores/clients/clientStore";
 import { Item } from "@/stores/Products/ProductInterface";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
+import { Router } from "vue-router";
+
+const router = getCurrentInstance()!.appContext.config.globalProperties.$router as Router;
+
 const page = ref({ title: "Crear nueva factura" });
 
 const invoiceStore = useInvoiceStore();
@@ -266,21 +285,35 @@ function calculateGrandTotal() {
 }
 
 async function createInvoice() {
-  let invoice = {
-    state: invoiceStore.newInvoiceData.state,
-    client_id: invoiceStore.newInvoiceData.client_id,
-    invoice_lines: [],
-  };
+  Swal.fire({
+    title: "Guardar factura",
+    text: "¿Está seguro de generar la factura",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, guardar!",
+    cancelButtonText: "Cancelar",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      let invoice = {
+        state: invoiceStore.newInvoiceData.state,
+        client_id: invoiceStore.newInvoiceData.client_id,
+        invoice_lines: [],
+      };
 
-  invoiceStore.items.forEach((item) => {
-    invoice.invoice_lines.push({
-      product_id: item.id,
-      price: item.price,
-      quantity: item.quantity,
-      batch: item.batch,
-    });
+      invoiceStore.items.forEach((item) => {
+        invoice.invoice_lines.push({
+          product_id: item.id,
+          price: item.price,
+          quantity: item.quantity,
+          batch: item.batch,
+        });
+      });
+      const res = await invoiceStore.createInvoice(invoice);
+      router.push({ name: "invoices-detail", params: { id: res } });
+    }
   });
-  await invoiceStore.createInvoice(invoice);
 }
 onMounted(async () => {
   await ProductStore.getProductsActive("");

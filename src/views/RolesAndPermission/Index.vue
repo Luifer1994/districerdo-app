@@ -1,5 +1,5 @@
 <template>
-  <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+  <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-card>
    <ModalCreateNewRol></ModalCreateNewRol>
     <v-card-text class="pa-5">
@@ -87,21 +87,10 @@ onMounted(() => {
   RoleAndPermissionStore.getRoles();
 });
 
-const page = ref({ title: "Configuración" });
+const page = ref({ title: "Configuración de roles y permisos" });
 
 let loading = RoleAndPermissionStore.loading;
-const breadcrumbs = ref([
-  {
-    text: "Seguridad",
-    disabled: false,
-    href: "#",
-  },
-  {
-    text: "Gestión de roles y permisos",
-    disabled: true,
-    href: "#",
-  },
-]);
+
 
 //create function getPermissions
 const getPermissions = async function () {

@@ -9,7 +9,7 @@
             density="compact"
             :items="providerStore.providers"
             variant="outlined"
-            item-title="last_name"
+            item-title="full_name"
             item-value="id"
             clearable
             append-inner-icon="mdi-magnify"
@@ -155,6 +155,17 @@
                       item-title="text"
                       item-value="value"
                     ></v-select>
+                    <p
+                      class="text-caption"
+                      style="color: red"
+                      v-if="
+                      !PurchaseStore.newPurchaseData.provider_id ||
+                      !PurchaseStore.items.length
+                      "
+                    >
+                      Debes seleccionar un proveedor y al menos un producto para poder
+                      guardar
+                    </p>
                     <v-btn
                       color="error"
                       class="mr-1 mt-1 pr-7"
@@ -199,7 +210,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
 import Swal from "sweetalert2";
 import ModalAddProduct from "@/components/Purchases/ModalAddProduct.vue";
 import { usePurchaseStore } from "../../stores/purchases/purchaseStore";
@@ -208,6 +219,9 @@ import { useproviderStore } from "../../stores/providers/providerStore";
 import { Item } from "../../stores/Products/ProductInterface";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 const page = ref({ title: "Registrar nueva compra" });
+import { Router } from "vue-router";
+
+const router = getCurrentInstance()!.appContext.config.globalProperties.$router as Router;
 
 const PurchaseStore = usePurchaseStore();
 const ProductStore = useProductStore();
@@ -279,8 +293,8 @@ async function createPurchase() {
       });
       PurchaseStore.newPurchaseData.purchase_lines = items;
 
-      await PurchaseStore.createPurchase(PurchaseStore.newPurchaseData);
-      PurchaseStore.cancelCreatePurchase();
+      const res = await PurchaseStore.createPurchase(PurchaseStore.newPurchaseData);
+      router.push({ name: "purchase-detail", params: { id: res } });
     }
   });
 }

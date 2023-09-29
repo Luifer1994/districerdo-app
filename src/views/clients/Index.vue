@@ -1,5 +1,5 @@
 <template>
-  <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+  <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-row>
     <v-col cols="12" sm="12">
       <v-card>
@@ -83,18 +83,6 @@ import { validatePermission } from "@/utils/validatePermission";
 const ClientStore = useClientStore();
 const CityStore = useCityStore();
 const page = ref({ title: "Clientes" });
-const breadcrumbs = ref([
-  {
-    text: "Clientes",
-    disabled: false,
-    href: "#",
-  },
-  {
-    text: "Listado de clientes",
-    disabled: true,
-    href: "#",
-  },
-]);
 
 //mounted
 onMounted(() => {

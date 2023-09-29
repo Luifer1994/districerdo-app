@@ -18,6 +18,18 @@
               inline
             ></v-badge>
           </h2>
+          <h2 class="text-h6">
+            Número de factura: {{ invoiceStore.invoice.code }}
+          </h2>
+          <h2 class="text-h6">
+            Descargar factura:
+            <v-btn color="success" density="compact" icon="mdi-file-document" @click="invoiceStore.downloadInvoice(invoiceStore.invoice.id)" v-if="validatePermission(['invoices-download'])">
+              <v-tooltip activator="parent" location="top"
+                >Descargar factura</v-tooltip
+              >
+              <v-icon> mdi-file-document </v-icon>
+            </v-btn>
+          </h2>
         </v-sheet>
       </v-card-text>
     </v-card>
@@ -91,6 +103,7 @@
           <v-icon>mdi-currency-usd</v-icon>
           MARCAR COMO PAGADA
         </v-btn>
+        
         <div class="d-flex flex-row-reverse">
           <v-btn
             class="mx-4 my-4"

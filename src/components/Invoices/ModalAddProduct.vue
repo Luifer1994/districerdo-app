@@ -39,7 +39,6 @@
               density="compact"
               label="Cantidad"
               hide-details
-              prefix="$"
               min="1"
               type="text"
               v-model="item.quantity"

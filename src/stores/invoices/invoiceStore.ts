@@ -6,6 +6,7 @@ import { ref } from "vue";
 import Swal from "sweetalert2";
 import { Item } from "../Products/ProductInterface";
 import { Invoice, InvoiceListResponse, NewInvoice } from "./invoiceInterfaces";
+import { downloadBase64File } from "../../utils/dowloadBase64";
 
 export const useInvoiceStore = defineStore("invoiceStore", {
   //state
@@ -68,10 +69,9 @@ export const useInvoiceStore = defineStore("invoiceStore", {
       this.loading = true;
       try {
         const response = await axiosHttp.post(`invoices/create`, invoice);
-
-        await this.getInvoices();
         this.cancelCreateInvoice();
         this.loading = false;
+        return response.data.data.id;
       } catch (error) {
         this.loading = false;
       }
@@ -156,6 +156,27 @@ export const useInvoiceStore = defineStore("invoiceStore", {
     async changePage(page: Number) {
       this.currentPage = page;
       await this.getInvoices();
+    },
+
+    /**
+     * Download a Invoice by id. to pdf format, the pdf form api send base64 string.
+     * @param id
+     * @returns
+     */
+    async downloadInvoice(id: Number) {
+      this.loading = true;
+      try {
+        const response = await axiosHttp.get(`invoices/download/${id}`);
+        this.loading = false;
+        var currentDate = new Date();
+        var day = currentDate.getDate().toString().padStart(2, "0");
+        var month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+        var year = currentDate.getFullYear();
+        var fileName = `FACTURA-${response.data.data.code}-${day}-${month}-${year}.pdf`;
+        downloadBase64File(response.data.data.base64, "pdf", fileName);
+      } catch (error) {
+        this.loading = false;
+      }
     },
 
     //reset all data

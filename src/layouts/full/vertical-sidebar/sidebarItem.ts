@@ -17,11 +17,11 @@ const sidebarItem: menu[] = [
     to: "/dashboards",
     permission: "home",
   },
-  { header: "Ventas", permission: "module-roles-and-permissions" },
+  { header: "Módulos", permission: "module-roles-and-permissions" },
   {
     title: "Facturación",
     to: "/invoices",
-    permission: "list-roles",
+    permission: "invoices-list",
     icon: "dollar-sign",
   },
   {
