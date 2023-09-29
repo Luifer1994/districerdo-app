@@ -13,7 +13,7 @@
           <h2 class="text-h6">
             Estado de factura:
             <v-badge
-              :color="invoiceStore.invoice.state === 'Pendiente' ? 'error' : 'success'"
+              :color="invoiceStore.invoice.state === 'Pendiente' ? 'warning' : invoiceStore.invoice.state === 'Pagada' ? 'success' : invoiceStore.invoice.state === 'Cancelada' ? 'error' : 'info' "
               :content="invoiceStore.invoice.state"
               inline
             ></v-badge>
@@ -95,7 +95,7 @@
           color="primary"
           v-if="
             invoiceStore.invoice.state === 'Pendiente' &&
-            validatePermission(['invoices-update'])
+            validatePermission(['invoices-paid'])
           "
           @click="invoiceStore.paidInvoice(invoiceStore.invoice.id)"
         >

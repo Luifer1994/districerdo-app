@@ -2,19 +2,58 @@
   <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-card>
     <v-card-text class="pa-5">
+      
       <v-row>
-        <v-col cols="12" lg="4" md="6">
+        <v-col cols="12" lg="3" md="4">
           <v-text-field
             density="compact"
-            label="Buscar facturas"
+            label="Buscar factura"
             hide-details
             variant="outlined"
+            v-model="InvoiceStore.search"
+            clearable
           ></v-text-field>
         </v-col>
-        <v-col cols="12" lg="8" md="6" class="text-right">
-          <v-btn color="primary" class="white--text" :to="{ name: 'invoices-create' }">
+        <v-col cols="12" lg="3" md="3">
+          <v-select
+            density="compact"
+            clearable
+            label="Estado"
+            :items="[
+              { name: 'PAGADA', value: 'PAID' },
+              { name: 'PENDIENTE', value: 'PENDING' },
+              { name: 'CANCELADA', value: 'CANCELLED' },
+            ]"
+            variant="outlined"
+            item-title="name"
+            item-value="value"
+            v-model="InvoiceStore.state"
+          ></v-select>
+        </v-col>
+        <v-col cols="12" lg="3" md="3">
+          <VueDatePicker
+            class="my-datepicker"
+            v-model="InvoiceStore.dates"
+            range
+            locale="es"
+          ></VueDatePicker>
+        </v-col>
+        <v-col cols="3" lg="1" md="2">
+          <v-btn color="error" @click="InvoiceStore.getInvoices()">
+            <v-tooltip activator="parent" location="top"> Buscar</v-tooltip>
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="3" lg="2" md="3" class="text-right">
+          <v-btn
+            color="primary"
+            class="white--text"
+            @click="$router.push({ name: 'invoices-create' })"
+            v-if="validatePermission(['invoices-create'])"
+          >
+            <v-tooltip activator="parent" location="top"> Registrar factura </v-tooltip>
             <v-icon>mdi-plus</v-icon>
-            <span class="hidden-sm-and-down">Crear factura</span>
+            <span class="hidden-sm-and-down">Registrar factura</span>
           </v-btn>
         </v-col>
       </v-row>
@@ -68,9 +107,9 @@
                   color="error"
                   density="compact"
                   icon="mdi-close"
-                  :disabled="invoice.state === 'Pagada'"
+                  :disabled="invoice.state === 'Pagada'|| invoice.state === 'Cancelada'"
                   @click="InvoiceStore.cancelInvoice(invoice.id)"
-                  v-if="validatePermission(['invoices-update'])"
+                  v-if="validatePermission(['invoices-cancel'])"
                 >
                   <v-tooltip activator="parent" location="top"
                     >CANCELAR FACTURA</v-tooltip
@@ -82,9 +121,9 @@
                   color="primary"
                   density="compact"
                   icon="mdi-currency-usd"
-                  :disabled="invoice.state === 'Pagada'"
+                  :disabled="invoice.state === 'Pagada'|| invoice.state === 'Cancelada'"
                   @click="InvoiceStore.paidInvoice(invoice.id)"
-                  v-if="validatePermission(['invoices-update'])"
+                  v-if="validatePermission(['invoices-paid'])"
                 >
                   <v-tooltip activator="parent" location="top"
                     >MARCAR COMO PAGADA</v-tooltip
@@ -131,6 +170,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { useInvoiceStore } from "@/stores/invoices/invoiceStore";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
 import { validatePermission } from "@/utils/validatePermission";

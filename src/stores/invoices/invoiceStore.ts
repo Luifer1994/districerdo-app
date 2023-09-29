@@ -31,6 +31,8 @@ export const useInvoiceStore = defineStore("invoiceStore", {
       totalPages: ref(0),
       lastPage: ref(0),
       search: ref(""),
+      state: ref(""),
+      dates: ref([]),
       newInvoiceData: {
         client_id: null,
         state: "PENDING",
@@ -48,8 +50,20 @@ export const useInvoiceStore = defineStore("invoiceStore", {
     async getInvoices() {
       this.loading = true;
       try {
-        const response = await axiosHttp.get<InvoiceListResponse>(
-          `invoices/list?page=${this.currentPage}&search=${this.search}`
+
+        let dateStart = "";
+        let dateEnd = "";
+
+        if (this.dates && this.dates.length > 0) {
+          dateStart = this.formateDate(this.dates[0]);
+          dateEnd = this.formateDate(this.dates[1]);
+        }
+
+        const stateParam = this.state ? this.state.toString() : "";
+        const searchParam = this.search ? this.search.toString() : "";
+
+        const response = await axiosHttp.get(
+          `invoices/list?page=${this.currentPage}&search=${searchParam}&date_start=${dateStart}&date_end=${dateEnd}&state=${stateParam}`
         );
         this.invoices = response.data.data.data;
         this.totalPages = response.data.data.last_page;
