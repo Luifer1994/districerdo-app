@@ -179,6 +179,21 @@ export const useInvoiceStore = defineStore("invoiceStore", {
       }
     },
 
+    /**
+     * get total amount of invoice for month.
+     */
+    async getTotalAmount() {
+      this.loading = true;
+      try {
+        const response = await axiosHttp.get(`invoices/total-amount-for-month`);
+        this.loading = false;
+        return response.data.data;
+      } catch (error) {
+        this.loading = false;
+      }
+    },
+
+
     //reset all data
     cancelCreateInvoice() {
       this.errors = {};

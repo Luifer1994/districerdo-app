@@ -40,23 +40,16 @@
           plain
           :ripple="false"
         >
-          <v-avatar size="35">
-            <img src="@/assets/images/users/user2.jpg" alt="Julia" />
-          </v-avatar>
+          <img src="@/assets/images/users/man.png" class="rounded-circle" width="40" />
         </v-btn>
       </template>
 
-      <v-list class="pa-6" elevation="10" rounded="lg" >
+      <v-list class="pa-6" elevation="10" rounded="lg">
         <h4 class="font-weight-medium fs-18">Perfil de usuario</h4>
         <div class="d-flex align-center my-4">
-          <img
-            src="@/assets/images/users/user2.jpg"
-            alt="Julia"
-            class="rounded-circle"
-            width="90"
-          />
+          <img src="@/assets/images/users/man.png" class="rounded-circle" width="90" />
           <div class="ml-4">
-            <h4 class="font-weight-medium fs-18"> 
+            <h4 class="font-weight-medium fs-18">
               {{ authStore.userLoged.name }}
             </h4>
             <span class="subtitle-2 font-weight-light">
@@ -70,13 +63,7 @@
             </div>
           </div>
         </div>
-        <v-list-item
-          class="pa-3 mb-2"
-          title="My perfil"
-          subtitle="Configuración de perfil"
-          rounded="lg"
-        >
-        </v-list-item>
+
         <v-btn
           block
           color="secondary"

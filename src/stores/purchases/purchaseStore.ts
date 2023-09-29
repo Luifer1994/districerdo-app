@@ -133,6 +133,19 @@ export const usePurchaseStore = defineStore("purchaseStore", {
         this.loading = false;
       }
     },
+    /**
+     * get total amount of invoice for month.
+     */
+    async getTotalAmount() {
+      this.loading = true;
+      try {
+        const response = await axiosHttp.get(`purchases/total-amount-for-month`);
+        this.loading = false;
+        return response.data.data;
+      } catch (error) {
+        this.loading = false;
+      }
+    },
 
     //reset all data
     cancelCreatePurchase() {

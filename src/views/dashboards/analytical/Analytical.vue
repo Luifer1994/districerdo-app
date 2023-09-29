@@ -24,17 +24,12 @@ const breadcrumbs = ref([
   <v-row>
     <v-col cols="12" sm="12" lg="6">
       <WelcomeCard />
-      <v-row class="mt-4">
-        <v-col cols="12" sm="6" lg="6" class="">
-          <TheEarnings></TheEarnings>
-        </v-col>
-        <v-col cols="12" sm="6" lg="6" class="">
-          <MonthlyRevenue></MonthlyRevenue>
-        </v-col>
-      </v-row>
     </v-col>
-    <v-col cols="12" sm="12" lg="6">
-      <TheSalesOverview></TheSalesOverview>
+    <v-col cols="12" sm="12" lg="3" xl="3" xxl="3">
+      <TheEarnings></TheEarnings>
+    </v-col>
+    <v-col cols="12" sm="12" lg="3" xl="3" xxl="3">
+      <MonthlyRevenue></MonthlyRevenue>
     </v-col>
   </v-row>
 </template>
