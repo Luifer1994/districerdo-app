@@ -280,9 +280,10 @@ function deleteItem(item: Item) {
 
 function calculateGrandTotal() {
   return invoiceStore.items.reduce((acc, item) => {
-    return item.price * item.quantity;
+    return acc + item.price * item.quantity;
   }, 0);
 }
+
 
 async function createInvoice() {
   Swal.fire({
