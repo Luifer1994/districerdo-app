@@ -1,4 +1,6 @@
 import { Item, Product } from "../Products/ProductInterface";
+import { User } from "../auth/authInterfaces";
+import { City, Client, DocumentType } from "../clients/clientInterface";
 
 export interface InvoiceListResponse {
   status: string;
@@ -29,9 +31,13 @@ export interface Invoice {
   state: string;
   created_at: Date;
   total: number;
+  total_paid: number;
+  total_for_pay: number;
   invoice_lines_count: number;
   client: Client;
   invoice_lines: InvoiceLine[];
+  partial_payments_of_invoice: PartialPayment[];
+  user : User;
 }
 
 export interface InvoiceLine {
@@ -41,6 +47,7 @@ export interface InvoiceLine {
   batch: Batch;
   product_id: number | null;
   product: Product;
+  total_line: number | null;
 }
 
 export interface Batch {
@@ -48,12 +55,19 @@ export interface Batch {
   code: string | null;
 }
 
-export interface Client {
+/* export interface Client {
   id: number;
   name: string;
   last_name: string;
   full_name: string;
-}
+  email: string;
+  phone: string;
+  document_number: string;
+  document_type: DocumentType;
+  address: string;
+  city: City
+} */
+
 
 export interface Link {
   url: null | string;
@@ -65,4 +79,16 @@ export interface NewInvoice {
   client_id: number | null;
   state: string | null;
   invoice_lines: Item[];
+}
+
+export interface PartialPayment {
+  invoice_id: number | null;
+  amount: number | null;
+  description: string | null;
+  evidence: [];
+  created_at: Date | null;
+  date: string | null;
+  user: User | null;
+  user_id: number | null;
+  id: number | null;
 }

@@ -31,6 +31,7 @@ export interface User {
     createdAt:       Date;
     updatedAt:       Date;
     changedAt:       Date;
+    full_name:       string;
 }
 
 export interface UserLogedInterface {

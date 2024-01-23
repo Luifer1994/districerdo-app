@@ -5,7 +5,12 @@ import { useNotification } from "@kyvg/vue3-notification";
 import { ref } from "vue";
 import Swal from "sweetalert2";
 import { Item } from "../Products/ProductInterface";
-import { Invoice, InvoiceListResponse, NewInvoice } from "./invoiceInterfaces";
+import {
+  Invoice,
+  InvoiceListResponse,
+  NewInvoice,
+  PartialPayment,
+} from "./invoiceInterfaces";
 import { downloadBase64File } from "../../utils/dowloadBase64";
 
 export const useInvoiceStore = defineStore("invoiceStore", {
@@ -39,6 +44,8 @@ export const useInvoiceStore = defineStore("invoiceStore", {
         invoice_lines: [] as Item[],
       } as NewInvoice,
       invoice: {} as Invoice,
+      partialPayment: {} as PartialPayment,
+      modalPartialPaymentActive: false as boolean,
     };
   },
 
@@ -193,6 +200,27 @@ export const useInvoiceStore = defineStore("invoiceStore", {
     },
 
     /**
+     * Download a evidence to partial payment format image, the image form api send base64 string.
+     */
+    async downloadEvidence(id: Number) {
+      this.loading = true;
+      try {
+        const response = await axiosHttp.get(
+          `invoices/download-evidence/${id}`
+        );
+        this.loading = false;
+        var currentDate = new Date();
+        var day = currentDate.getDate().toString().padStart(2, "0");
+        var month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+        var year = currentDate.getFullYear();
+        var fileName = `COMPROBANTE-${response.data.data.code}-${day}-${month}-${year}.jpg`;
+        downloadBase64File(response.data.data.base64, "jpg", fileName);
+      } catch (error) {
+        this.loading = false;
+      }
+    },
+
+    /**
      * get total amount of invoice for month.
      */
     async getTotalAmount() {
@@ -225,6 +253,61 @@ export const useInvoiceStore = defineStore("invoiceStore", {
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
+    },
+
+    /**
+     * Show modal for add partial payment.
+     * @param invoiceId
+     */
+    async addPartialPayment(invoiceId: Number) {
+      await this.getInvoice(invoiceId);
+
+      this.modalPartialPaymentActive = true;
+      this.partialPayment = {
+        invoice_id: invoiceId,
+        amount: 0,
+        description: "",
+      };
+    },
+
+    /**
+     * Create a new partial payment.
+     */
+    async createPartialPayment() {
+      this.loading = true;
+      const formData = new FormData();
+      formData.append("invoice_id", this.partialPayment.invoice_id);
+      formData.append("amount", this.partialPayment.amount);
+      formData.append("description", this.partialPayment.description);
+      let evidence =
+        this.partialPayment.evidence && this.partialPayment.evidence[0]
+          ? this.partialPayment.evidence[0]
+          : null;
+
+      if (evidence) {
+        formData.append("evidence", evidence);
+      }
+
+      try {
+        await axiosHttp.post(`invoices/partial-payment`, formData);
+        this.loading = false;
+        this.resetPartialPayment();
+        if (this.invoice.id) {
+          await this.getInvoice(this.invoice.id);
+        }
+        await this.getInvoices();
+      } catch (error) {
+        this.loading = false;
+      }
+    },
+
+    resetPartialPayment() {
+      this.modalPartialPaymentActive = false;
+      this.partialPayment = {
+        invoice_id: null,
+        amount: null,
+        description: "",
+      } as PartialPayment;
     },
   },
 });

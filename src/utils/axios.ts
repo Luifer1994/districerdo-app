@@ -5,8 +5,7 @@ import { useLoadingStore } from "@/stores/loadingStore";
 
 
 const axiosHttp = axios.create({
-  /* baseURL: "http://127.0.0.1:8000/api/", */
-  baseURL: "https://www.districerdott.com/api/",
+  baseURL: import.meta.env.VITE_URL_API
 });
 
 axiosHttp.interceptors.request.use(

@@ -225,7 +225,6 @@ onMounted(() => {
  * @param values
  */
 function onSubmit(values: any) {
-  console.log(values);
   if (ClientStore.client.id) {
     values.id = ClientStore.client.id;
     ClientStore.client = values;
