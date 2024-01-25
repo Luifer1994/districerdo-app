@@ -5,10 +5,12 @@ import Swal from "sweetalert2";
 import { useNotification } from "@kyvg/vue3-notification";
 import { ref } from "vue";
 import { Item } from "../Products/ProductInterface";
+import { downloadBase64File } from "../../utils/dowloadBase64";
 import {
   DataGetPurchase,
   GetPurchaseResponse,
   NewPurchase,
+  PartialPayment,
   Purchase,
   PurchaseListResponse,
 } from "./purchaseInterfaces";
@@ -40,6 +42,8 @@ export const usePurchaseStore = defineStore("purchaseStore", {
       search: ref(""),
       state: ref(""),
       dates: ref([]),
+      modalPartialPaymentActive: false as boolean,
+      partialPayment: {} as PartialPayment,
     };
   },
 
@@ -134,7 +138,7 @@ export const usePurchaseStore = defineStore("purchaseStore", {
       }
     },
     /**
-     * get total amount of invoice for month.
+     * get total amount of Purchase for month.
      */
     async getTotalAmount() {
       this.loading = true;
@@ -167,6 +171,82 @@ export const usePurchaseStore = defineStore("purchaseStore", {
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
+    },
+
+    /**
+     * Show modal for add partial payment.
+     * @param purchaseId
+     */
+    async addPartialPayment(purchaseId: Number) {
+      await this.findPurchase(purchaseId);
+
+      this.modalPartialPaymentActive = true;
+      this.partialPayment = {
+        purchase_id: purchaseId,
+        amount: 0,
+        description: "",
+      };
+    },
+
+    /**
+     * Create a new partial payment.
+     */
+    async createPartialPayment() {
+      this.loading = true;
+      const formData = new FormData();
+      formData.append("purchase_id", this.partialPayment.purchase_id);
+      formData.append("amount", this.partialPayment.amount);
+      formData.append("description", this.partialPayment.description);
+      let evidence =
+        this.partialPayment.evidence && this.partialPayment.evidence[0]
+          ? this.partialPayment.evidence[0]
+          : null;
+
+      if (evidence) {
+        formData.append("evidence", evidence);
+      }
+
+      try {
+        await axiosHttp.post(`purchases/partial-payment`, formData);
+        this.loading = false;
+        this.resetPartialPayment();
+        if (this.purchase.id) {
+          await this.findPurchase(this.purchase.id);
+        }
+        await this.getPurchases();
+      } catch (error) {
+        this.loading = false;
+      }
+    },
+
+    /**
+     * Download a evidence to partial payment format image, the image form api send base64 string.
+     */
+    async downloadEvidence(id: Number) {
+      this.loading = true;
+      try {
+        const response = await axiosHttp.get(
+          `purchases/download-evidence/${id}`
+        );
+        this.loading = false;
+        var currentDate = new Date();
+        var day = currentDate.getDate().toString().padStart(2, "0");
+        var month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+        var year = currentDate.getFullYear();
+        var fileName = `COMPROBANTE-${response.data.data.code}-${day}-${month}-${year}.jpg`;
+        downloadBase64File(response.data.data.base64, "jpg", fileName);
+      } catch (error) {
+        this.loading = false;
+      }
+    },
+
+    resetPartialPayment() {
+      this.modalPartialPaymentActive = false;
+      this.partialPayment = {
+        purchase_id: null,
+        amount: null,
+        description: "",
+      } as PartialPayment;
     },
   },
 });

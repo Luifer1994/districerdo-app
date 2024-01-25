@@ -1,9 +1,7 @@
 <template>
   <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-app-bar color="white" dense flat>
-    <v-btn color="primary" 
-      @click="$router.push({ name: 'invoices-list' })"
-    >
+    <v-btn color="primary" @click="$router.push({ name: 'invoices-list' })">
       <v-icon left>mdi-arrow-left</v-icon>
       Atras
     </v-btn>
@@ -145,7 +143,10 @@
 
       <v-divider color="primary" class="mt-4 mb-4"></v-divider>
 
-      <v-expansion-panels color="primary" v-if="invoiceStore.invoice.partial_payments_of_invoice.length">
+      <v-expansion-panels
+        color="primary"
+        v-if="invoiceStore.invoice.partial_payments_of_invoice.length"
+      >
         <v-expansion-panel title="Historial de abonos">
           <v-expansion-panel-text>
             <div
@@ -212,6 +213,11 @@
       </v-expansion-panels>
 
       <v-divider color="primary" class="mt-4 mb-4"></v-divider>
+
+      <p class="text-h6 mb-4">
+        <span>Productos facturados:</span>
+      </p>
+
       <div
         class="v-table v-theme--light v-table--density-default invoice-preview-table border text-high-emphasis overflow-hidden mb-6"
       >
@@ -236,7 +242,6 @@
                   {{ item.product.name }}
                 </td>
                 <td class="text-no-wrap">
-                  B
                   {{ item.product.sku }}
                 </td>
                 <td class="text-center">
@@ -278,10 +283,26 @@
           <table class="w-100">
             <tbody>
               <tr>
-                <td class="pe-16">Total pagado:</td>
+                <td class="pe-16">Total factura:</td>
                 <td class="text-end">
                   <h6 class="text-sm">
                     {{
+                      invoiceStore.invoice.total
+                        .toLocaleString("es-CO", { style: "currency", currency: "COP" })
+                        .split(",")[0]
+                    }}
+                  </h6>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="w-100">
+            <tbody>
+              <tr>
+                <td class="pe-16">Total pagado:</td>
+                <td class="text-end">
+                  <h6 class="text-sm">
+                  -  {{
                       invoiceStore.invoice.total_paid
                         .toLocaleString("es-CO", { style: "currency", currency: "COP" })
                         .split(",")[0]
@@ -308,22 +329,6 @@
             aria-orientation="horizontal"
             role="separator"
           />
-          <table class="w-100">
-            <tbody>
-              <tr>
-                <td class="pe-16">Total factura:</td>
-                <td class="text-end">
-                  <h6 class="text-sm">
-                    {{
-                      invoiceStore.invoice.total
-                        .toLocaleString("es-CO", { style: "currency", currency: "COP" })
-                        .split(",")[0]
-                    }}
-                  </h6>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
       <hr

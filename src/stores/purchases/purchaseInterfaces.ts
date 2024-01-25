@@ -1,3 +1,6 @@
+import { User } from "../auth/authInterfaces";
+import { provider } from "../providers/providerInterface";
+
 export interface PurchaseListResponse {
   status: string;
   message: string;
@@ -27,16 +30,14 @@ export interface Purchase {
   status: string;
   total_products: number;
   total: number;
-  provider: Provider;
+  total_paid: number;
+  total_for_pay: number;
+  provider: provider;
   purchase_lines: PurchaseLine[];
   created_at: Date;
 }
 
-export interface Provider {
-  id: number;
-  name: string;
-  full_name: string;
-}
+
 
 export interface PurchaseLine {
   id?: number;
@@ -80,23 +81,22 @@ export interface GetPurchaseResponse {
 }
 
 export interface DataGetPurchase {
-  id: number;
+  id: number| null;
   code: string;
   provider_id: number;
   status: string;
   created_at: Date;
   total_products: number;
   total: number;
-  provider: ProviderGetPurchase;
+  total_paid: number;
+  total_for_pay: number;
+  provider: provider;
   purchase_lines: PurchaseLineGetPurchase[];
+  partial_payments_of_purchase: PartialPayment[];
+  user : User;
 }
 
-export interface ProviderGetPurchase {
-  id: number;
-  name: string;
-  last_name: string;
-  full_name: string;
-}
+
 
 export interface PurchaseLineGetPurchase {
   id: number;
@@ -106,6 +106,7 @@ export interface PurchaseLineGetPurchase {
   product_id: number;
   product: ProductGetPurchase;
   entrance: Entrance;
+  total_line: number;
 }
 
 export interface ProductGetPurchase {
@@ -113,4 +114,16 @@ export interface ProductGetPurchase {
   sku: string;
   name: string;
   description: null;
+}
+
+export interface PartialPayment {
+  purchase_id: number | null;
+  amount: number | null;
+  description: string | null;
+  evidence: [];
+  created_at: Date | null;
+  date: string | null;
+  user: User | null;
+  user_id: number | null;
+  id: number | null;
 }

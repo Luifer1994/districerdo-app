@@ -66,6 +66,8 @@
               <th>FECHA_CREACIÓN</th>
               <th>CANT_PRODUCTOS</th>
               <th>TOTAL_COMPRA</th>
+              <th>TOTAL_PAGADO</th>
+              <th>POR_PAGAR</th>
               <th>ESTADO</th>
               <th>ACCIONES</th>
             </tr>
@@ -89,6 +91,20 @@
                 }}
               </td>
               <td>
+                {{
+                  purchase.total_paid
+                    .toLocaleString("es-CO", { style: "currency", currency: "COP" })
+                    .split(",")[0]
+                }}
+              </td>
+              <td>
+                {{
+                  purchase.total_for_pay
+                    .toLocaleString("es-CO", { style: "currency", currency: "COP" })
+                    .split(",")[0]
+                }}
+              </td>
+              <td>
                 <v-badge
                   :content="purchase.status"
                   :color="purchase.status === 'PENDIENTE' ? 'error' : 'success'"
@@ -97,35 +113,54 @@
                 </v-badge>
               </td>
               <td>
-                <v-btn
-                  class="mr-1"
-                  color="primary"
-                  density="compact"
-                  icon="mdi-currency-usd"
-                  :disabled="purchase.status === 'PAGADA'"
-                  @click="PurchaseStore.paidPurchase(purchase.id)"
-                  v-if="validatePermission(['purchases-update'])"
-                >
-                  <v-tooltip activator="parent" location="top"
-                    >MARCAR COMO PAGADA</v-tooltip
-                  >
-                  <v-icon>mdi-currency-usd</v-icon>
-                </v-btn>
-                <v-btn
-                  color="warning"
-                  density="compact"
-                  icon="mdi-eye"
-                  :to="{
-                    name: 'purchase-detail',
-                    params: { id: purchase.id },
-                  }"
-                  v-if="validatePermission(['purchases-show'])"
-                >
-                  <v-tooltip activator="parent" location="top">Detalle</v-tooltip>
-                  <v-icon>mdi-eye</v-icon>
-                </v-btn>
+                <div class="text-center">
+                  <v-menu>
+                    <template v-slot:activator="{ props: menu }">
+                      <v-tooltip location="top">
+                        <template v-slot:activator="{ props: tooltip }">
+                          <v-btn
+                            color="grey-lighten-1"
+                            v-bind="mergeProps(menu, tooltip)"
+                          >
+                            Acciones <v-icon> mdi-dots-vertical </v-icon>
+                          </v-btn>
+                        </template>
+                        <span> Acciones de la compra </span>
+                      </v-tooltip>
+                    </template>
+                    <v-list>
+                      <div
+                        v-for="(item, index) in acctionsTable"
+                        :key="index"
+                        :value="item"
+                      >
+                        <v-list-item
+                          v-if="
+                            item.show(purchase.status) &&
+                            validatePermission([item.permission])
+                          "
+                          @click="
+                            item.isDetailLink
+                              ? $router.push({
+                                  name: 'purchase-detail',
+                                  params: { id: purchase.id },
+                                })
+                              : PurchaseStore[item.action](purchase.id)
+                          "
+                        >
+                          <v-list-item-title
+                            >{{ item.title }}
+                            <v-icon v-if="item.icon" :color="item.color">
+                              {{ item.icon }}
+                            </v-icon>
+                          </v-list-item-title>
+                        </v-list-item>
+                      </div>
+                    </v-list>
+                  </v-menu>
+                </div>
               </td>
-            </tr>
+              </tr>
           </tbody>
         </v-table>
         <v-divider color="primary" class="mt-4 mb-4"></v-divider>
@@ -139,6 +174,7 @@
         />
       </v-container>
     </v-card-text>
+    <CreatePartialPayment></CreatePartialPayment>
   </v-card>
 </template>
 
@@ -149,16 +185,56 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import { validatePermission } from "@/utils/validatePermission";
 import { usePurchaseStore } from "@/stores/purchases/purchaseStore";
 import BaseBreadcrumb from "@/components/BaseBreadcrumb.vue";
+import CreatePartialPayment from "./CreatePartialPayment.vue";
 const page = ref({ title: "Listado de compra" });
 const PurchaseStore = usePurchaseStore();
 const dates = ref([]);
 
+const acctionsTable = ref([
+  {
+    title: "Marcar como pagada",
+    icon: "mdi-currency-usd",
+    color: "primary",
+    action: "paidPurchase",
+    permission: "purchases-update",
+    show: (status) => status === "PENDIENTE",
+    isDetailLink: false,
+  },
+  {
+    title: "Detalle",
+    icon: "mdi-eye",
+    color: "warning",
+    action: "detailInvoice",
+    permission: "purchases-show",
+    show: (status) => true,
+    isDetailLink: true,
+  },
+  {
+    title: "Registrar pago parcial",
+    icon: "mdi mdi-cash-multiple",
+    color: "primary",
+    action: "addPartialPayment",
+    permission: "purchases-partial-payment",
+    show: (status) => status === "PENDIENTE",
+    isDetailLink: false,
+  },
+]);
+
 //mounted
 onMounted(() => {
   PurchaseStore.getPurchases();
+ //sacar item del acctionsTable segun el permiso
+ acctionsTable.value = acctionsTable.value.filter((item) => {
+    return validatePermission([item.permission]);
+  });
 });
+
+const mergeProps = (menu, tooltip) => {
+  return {
+    ...menu,
+    ...tooltip,
+    class: "ma-2",
+  };
+};
 </script>
-<style scoped>
-</style>
-
-
+<style scoped></style>
