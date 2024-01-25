@@ -50,6 +50,9 @@ export const useAuthStore = defineStore('authStore', {
                 router.push('/auth/login');
             }
             catch (error) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("userLoged");
+                router.push('/auth/login');
                 this.errors = error;
             }
         }
