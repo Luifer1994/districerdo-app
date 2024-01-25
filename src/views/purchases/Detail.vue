@@ -1,7 +1,7 @@
 <template>
   <BaseBreadcrumb :title="page.title"></BaseBreadcrumb>
   <v-app-bar color="white" dense flat>
-    <v-btn color="primary" @click="$router.push({ name: 'purchases-list' })">
+    <v-btn color="primary" @click="$router.push({ name: 'purchase-list' })">
       <v-icon left>mdi-arrow-left</v-icon>
       Atras
     </v-btn>
